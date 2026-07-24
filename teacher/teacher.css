@@ -151,6 +151,7 @@ a { color: inherit; }
 .quick-links a:hover { border-color: var(--teal); background: var(--surface); }
 .quick-links span { color: var(--muted); font-size: .78rem; font-weight: 800; text-transform: uppercase; }
 .quick-links strong { font-family: Georgia, serif; font-size: 1.28rem; font-weight: 500; }
+.booster-teacher-links { margin-top: 0; }
 
 .status-section, .control-section { padding: 64px 0 8px; }
 .section-heading {

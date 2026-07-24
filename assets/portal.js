@@ -95,7 +95,7 @@
   }
 
   document.querySelector("#lock-portal").addEventListener("click", () => {
-    localStorage.removeItem("nelsonPortalAccess");
+    window.NelsonPortalAccess?.clear();
     window.location.reload();
   });
 })();

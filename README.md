@@ -4,8 +4,13 @@ Static student portal and public-safe teacher operations page for Nelson's
 IELTS-standard B1-B2 English course.
 
 - Student routes contain released student materials only.
+- HTML learning materials open as native, responsive portal pages rather than
+  embedded PDFs.
+- Skill Boosters group reusable Writing, Reading, Speaking, and Grammar work.
+- Interactive homework saves on the learner's device and synchronizes progress
+  and final submissions to a private Google workbook.
 - `/teacher/` mirrors public release state and provides links into
-  Google-authenticated private administration.
+  Google-authenticated private administration and matched teacher materials.
 - Teacher notes, answer keys, trackers, and administration records stay outside this repository.
 - Private Google files remain owner-only; their links do not grant access.
 - The access screen is a low-friction device gate. GitHub Pages is static, so it is not strong file-level authentication.

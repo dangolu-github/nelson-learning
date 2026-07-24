@@ -1,10 +1,26 @@
 (function () {
   "use strict";
 
-  const accessVersion = "nelson-access-v1";
-  const expectedDigest =
-    "358a3cd454c38404d1162e39500b2fca02ee644c45bc5a886af173579c1e9549";
-  const storageKey = "nelsonPortalAccess";
+  const endpoint = window.NELSON_PORTAL_CONFIG?.serviceEndpoint || "";
+  const storageKey = "nelsonPortalAccessV2";
+  let memoryToken = "";
+  let resolveReady;
+  const ready = new Promise((resolve) => {
+    resolveReady = resolve;
+  });
+
+  window.NelsonPortalAccess = {
+    ready,
+    getToken: () => memoryToken || storedToken(),
+    clear: () => {
+      memoryToken = "";
+      try {
+        localStorage.removeItem(storageKey);
+      } catch {
+        // The in-memory token is still cleared.
+      }
+    },
+  };
 
   function revealPage() {
     document.documentElement.classList.add("portal-unlocked");
@@ -12,6 +28,7 @@
       element.hidden = false;
     });
     document.querySelector(".access-gate")?.remove();
+    resolveReady(memoryToken || storedToken());
   }
 
   function bytesToHex(buffer) {
@@ -25,45 +42,124 @@
     return bytesToHex(await crypto.subtle.digest("SHA-256", data));
   }
 
-  function buildGate() {
+  function buildGate(checking) {
+    document.querySelector(".access-gate")?.remove();
     const gate = document.createElement("div");
     gate.className = "access-gate";
     gate.innerHTML = `
       <section class="access-panel" aria-labelledby="access-title">
         <p class="access-wordmark">NELSON</p>
         <p class="access-kicker">Private learning portal</p>
-        <h1 id="access-title">Welcome back.</h1>
-        <p>Enter the portal word to open your current class materials.</p>
-        <form class="access-form">
+        <h1 id="access-title">${checking ? "Checking access…" : "Welcome back."}</h1>
+        <p>${checking ? "Please wait a moment." : "Enter the portal word to open your current class materials."}</p>
+        <form class="access-form" ${checking ? "hidden" : ""}>
           <label for="portal-word">Portal word</label>
           <input id="portal-word" name="portal-word" type="password" autocomplete="current-password" required autofocus>
           <small>Hint: your teacher’s first name, in lowercase.</small>
           <p class="access-error" role="alert" hidden>That portal word is not correct.</p>
           <button type="submit">Enter learning space</button>
         </form>
+        <p class="access-error connection-error" role="alert" hidden>The portal connection is unavailable. Please try again.</p>
       </section>`;
 
-    gate.querySelector("form").addEventListener("submit", async (event) => {
+    gate.querySelector("form")?.addEventListener("submit", async (event) => {
       event.preventDefault();
       const value = gate.querySelector("input").value.trim();
-      const accepted = (await digest(value)) === expectedDigest;
-      if (!accepted) {
-        gate.querySelector(".access-error").hidden = false;
-        gate.querySelector("input").select();
-        return;
+      const button = gate.querySelector("button");
+      button.disabled = true;
+      button.textContent = "Checking…";
+      try {
+        const answerHash = await digest(value);
+        request("verifyPortalAccess", { answerHash }, (data) => {
+          if (data?.ok && data.allowed && data.accessToken) {
+            memoryToken = data.accessToken;
+            try {
+              localStorage.setItem(storageKey, data.accessToken);
+            } catch {
+              // The in-memory token still works for this visit.
+            }
+            revealPage();
+            return;
+          }
+          button.disabled = false;
+          button.textContent = "Enter learning space";
+          gate.querySelector(".access-form .access-error").hidden = false;
+          gate.querySelector("input").select();
+        }, () => showConnectionError(gate, button));
+      } catch {
+        showConnectionError(gate, button);
       }
-      localStorage.setItem(storageKey, accessVersion);
-      revealPage();
     });
     document.body.prepend(gate);
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.getItem(storageKey) === accessVersion) {
-      revealPage();
+  function showConnectionError(gate, button) {
+    button.disabled = false;
+    button.textContent = "Try again";
+    gate.querySelector(".connection-error").hidden = false;
+  }
+
+  function storedToken() {
+    try {
+      return localStorage.getItem(storageKey) || "";
+    } catch {
+      return memoryToken;
+    }
+  }
+
+  function request(action, parameters, success, failure) {
+    if (!endpoint || endpoint.includes("__NELSON_")) {
+      failure();
       return;
     }
-    buildGate();
+    const callbackName =
+      "__nelsonPortalGate" + Date.now() + Math.random().toString(16).slice(2);
+    const script = document.createElement("script");
+    const timeout = window.setTimeout(() => {
+      cleanup();
+      failure();
+    }, 10000);
+    function cleanup() {
+      window.clearTimeout(timeout);
+      delete window[callbackName];
+      script.remove();
+    }
+    window[callbackName] = (data) => {
+      cleanup();
+      success(data);
+    };
+    script.onerror = () => {
+      cleanup();
+      failure();
+    };
+    const query = new URLSearchParams({
+      ...parameters,
+      action,
+      callback: callbackName,
+      _: String(Date.now()),
+    });
+    script.src = `${endpoint}?${query.toString()}`;
+    document.head.append(script);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const token = storedToken();
+    if (!token) {
+      buildGate(false);
+      return;
+    }
+    memoryToken = token;
+    buildGate(true);
+    request("validatePortalAccess", { accessToken: token }, (data) => {
+      if (data?.ok && data.allowed) {
+        revealPage();
+        return;
+      }
+      window.NelsonPortalAccess.clear();
+      buildGate(false);
+    }, () => {
+      window.NelsonPortalAccess.clear();
+      buildGate(false);
+    });
   });
 })();
-

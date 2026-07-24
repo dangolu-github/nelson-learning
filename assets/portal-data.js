@@ -49,7 +49,7 @@ window.NELSON_PORTAL_DATA = {
       files: [
         {
           label: "Open reused handout",
-          href: "2026-07-20/index.html",
+          href: "2026-07-13/learning-handout.html",
         },
       ],
       review: "",
@@ -96,8 +96,8 @@ window.NELSON_PORTAL_DATA = {
       archived: false,
       files: [
         {
-          label: "Open Class 3 page",
-          href: "2026-07-24/index.html",
+          label: "Open learning handout",
+          href: "2026-07-24/learning-handout.html",
         },
       ],
       review: "",

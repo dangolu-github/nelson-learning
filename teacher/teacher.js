@@ -234,6 +234,9 @@
     document.querySelectorAll("[data-private-link]").forEach((link) => {
       link.href = config[link.dataset.privateLink];
     });
+    document.querySelectorAll("[data-private-booster-link]").forEach((link) => {
+      link.href = config.matchedBoosterFiles[link.dataset.privateBoosterLink];
+    });
   }
 
   async function loadVerifiedCommit() {
