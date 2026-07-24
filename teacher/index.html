@@ -19,115 +19,69 @@
       <div>
         <p class="eyebrow">Nelson · IELTS/B2</p>
         <h1>Teacher portal</h1>
-        <p class="hero-copy">
-          Review the student site, plan release changes, and open the protected
-          course controls from one place.
-        </p>
+        <p class="hero-copy">Class release, matched materials, homework checking, and archive.</p>
       </div>
       <div class="hero-actions">
-        <a class="primary-action" data-private-link="controlSheet" target="_blank" rel="noopener">Open private controls</a>
+        <a class="primary-action" data-private-link="homeworkWorkspace" target="_blank" rel="noopener">Open teacher workspace</a>
+        <a class="quiet-action" data-private-link="controlSheet" target="_blank" rel="noopener">Open durable controls</a>
         <button id="lock-teacher-portal" class="quiet-action" type="button">Lock portal</button>
       </div>
     </header>
 
-    <section class="boundary-note" aria-labelledby="boundary-title">
-      <div>
-        <p class="eyebrow">Access boundary</p>
-        <h2 id="boundary-title">GitHub view, Google protection</h2>
-      </div>
-      <p>
-        This GitHub page contains public-safe release information only. Teacher
-        notes, answer keys, learner records, and editable controls remain in
-        owner-only Google files. Changes drafted here are not live until the
-        GitHub publication is completed and verified.
-      </p>
-    </section>
-
-    <section class="quick-links" aria-label="Teacher workspaces">
+    <nav class="quick-links" aria-label="Teacher workspaces">
       <a data-private-link="studentSite" target="_blank" rel="noopener">
         <span>Student site</span><strong>Open live portal</strong>
       </a>
-      <a data-private-link="controlSheet" target="_blank" rel="noopener">
-        <span>Release controls</span><strong>Open private sheet</strong>
+      <a data-private-link="homeworkWorkspace" target="_blank" rel="noopener">
+        <span>Homework</span><strong>Check, comment, explain</strong>
       </a>
       <a data-private-link="courseTracker" target="_blank" rel="noopener">
-        <span>Course tracker</span><strong>Open evidence record</strong>
-      </a>
-      <a data-private-link="homeworkResponses" target="_blank" rel="noopener">
-        <span>Homework responses</span><strong>Open synced work</strong>
+        <span>Course record</span><strong>Open tracker</strong>
       </a>
       <a data-private-link="teacherMaterials" target="_blank" rel="noopener">
-        <span>Teacher materials</span><strong>Open protected folder</strong>
+        <span>Teacher files</span><strong>Open private folder</strong>
       </a>
-    </section>
+    </nav>
 
-    <section class="status-section" aria-labelledby="homework-title">
+    <section class="control-section" aria-labelledby="active-title">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">24 July class and homework</p>
-          <h2 id="homework-title">Reveal, review, and grade</h2>
+          <p class="eyebrow">Current teaching</p>
+          <h2 id="active-title">Active class dates</h2>
         </div>
-      </div>
-      <p class="planning-note">
-        Use the private reveal controls to enable an answer or explanation beside
-        its matching class question. Open the response base to review and grade
-        the three submitted homework tasks. The private Reading key mirrors the
-        revised sentence-context vocabulary questions and retains the source notes.
-      </p>
-      <div class="quick-links booster-teacher-links">
-        <a data-private-link="lessonReveals" target="_blank" rel="noopener">
-          <span>Class handout</span><strong>Open answer/explanation toggles</strong>
-        </a>
-        <a data-private-link="homeworkResponses" target="_blank" rel="noopener">
-          <span>All three homework tasks</span><strong>Open submissions and grading</strong>
-        </a>
-        <a data-private-link="readingAnswerKey" target="_blank" rel="noopener">
-          <span>Homework 1 · Reading</span><strong>Open revised key and source notes</strong>
-        </a>
-        <a data-private-booster-link="grammar" target="_blank" rel="noopener">
-          <span>Only approved Skill Booster</span><strong>Open grammar book</strong>
-        </a>
-      </div>
-    </section>
-
-    <section class="status-section" aria-labelledby="status-title">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Live student state</p>
-          <h2 id="status-title">Release overview</h2>
-        </div>
-        <div class="commit-chip">
-          <span>Verified commit</span>
-          <strong id="verified-commit">Loading…</strong>
-        </div>
-      </div>
-      <div id="summary-cards" class="summary-cards"></div>
-    </section>
-
-    <section class="control-section" aria-labelledby="control-title">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Planning surface</p>
-          <h2 id="control-title">Classes and release controls</h2>
-        </div>
-        <div class="plan-actions">
+        <div class="heading-actions">
+          <span class="commit-chip"><small>Verified commit</small><strong id="verified-commit">Loading…</strong></span>
           <button id="reset-plan" class="quiet-action dark" type="button">Reset draft</button>
           <button id="copy-plan" class="primary-action" type="button">Copy change plan</button>
         </div>
       </div>
       <p class="planning-note">
-        You can test intended settings below. They are saved only on this
-        device. Use the private control sheet for the durable request, then
-        publish and verify GitHub before calling a change live.
+        Keep List, Access, Guidance, Placement, and Review independent. A draft is
+        not live until GitHub is published and verified.
       </p>
-      <div id="release-board" class="release-board"></div>
+      <div id="active-release-board" class="release-board"></div>
       <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
     </section>
 
-    <footer>
-      <span>Nelson Teacher Portal</span>
-      <span>Plan · publish · verify · record</span>
-    </footer>
+    <section class="control-section archive-section" aria-labelledby="archive-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Filed by original class date</p>
+          <h2 id="archive-title">Archive</h2>
+        </div>
+      </div>
+      <p class="planning-note">
+        An archived class keeps its original date and the same Class handout,
+        Homework, and Class summary subsections.
+      </p>
+      <div id="archive-release-board" class="release-board"></div>
+    </section>
+
+    <p class="privacy-note">
+      This GitHub page contains public-safe release information only. Teacher
+      versions, answers, comments, learner responses, and durable controls open
+      in owner-only Google workspaces.
+    </p>
   </main>
 </body>
 </html>

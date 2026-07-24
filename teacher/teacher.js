@@ -3,14 +3,14 @@
 
   const data = window.NELSON_PORTAL_DATA;
   const config = window.NELSON_TEACHER_PORTAL;
-  const draftKey = "nelsonTeacherReleaseDraftV1";
+  const draftKey = "nelsonTeacherReleaseDraftV2";
   if (!data || !config) return;
 
   const resourceById = new Map(
     data.resources.map((resource) => [resource.id, resource]),
   );
 
-  function initialState(resource) {
+  function liveState(resource) {
     return {
       listed: Boolean(resource.listed),
       released: Boolean(resource.released),
@@ -34,11 +34,11 @@
   let draft = readDraft();
 
   function resolvedState(resource) {
-    return { ...initialState(resource), ...(draft[resource.id] || {}) };
+    return { ...liveState(resource), ...(draft[resource.id] || {}) };
   }
 
   function statesDiffer(resource, state) {
-    const live = initialState(resource);
+    const live = liveState(resource);
     return Object.keys(live).some((key) => live[key] !== state[key]);
   }
 
@@ -52,37 +52,6 @@
     element.textContent = text;
     parent.append(element);
     return element;
-  }
-
-  function summaryCard(label, value, note) {
-    const card = document.createElement("article");
-    addText(card, "span", "summary-label", label);
-    addText(card, "strong", "summary-value", String(value));
-    addText(card, "p", "summary-note", note);
-    return card;
-  }
-
-  function renderSummary() {
-    const listed = data.resources.filter((resource) => resource.listed).length;
-    const released = data.resources.filter(
-      (resource) => resource.listed && resource.released,
-    ).length;
-    const locked = data.resources.filter(
-      (resource) => resource.listed && !resource.released,
-    ).length;
-    const reviews = data.resources.filter(
-      (resource) =>
-        resource.listed &&
-        resource.reviewVisible &&
-        resource.review.trim().length > 0,
-    ).length;
-    const summary = document.querySelector("#summary-cards");
-    summary.replaceChildren(
-      summaryCard("Listed", listed, "Visible class cards"),
-      summaryCard("Released", released, "Open student routes"),
-      summaryCard("Locked", locked, "Listed but unavailable"),
-      summaryCard("Reviews", reviews, "Visible review sections"),
-    );
   }
 
   function labelledSelect(label, field, values, state, resource) {
@@ -103,70 +72,130 @@
     return wrapper;
   }
 
-  function renderBoard() {
-    const board = document.querySelector("#release-board");
-    board.replaceChildren();
+  function sectionRow(label, status, links) {
+    const row = document.createElement("div");
+    row.className = "material-row";
+    const copy = document.createElement("div");
+    addText(copy, "strong", "", label);
+    addText(copy, "span", "", status);
+    const actions = document.createElement("div");
+    actions.className = "material-actions";
+    links.forEach((item) => {
+      if (!item?.href) return;
+      const link = document.createElement("a");
+      link.href = item.href;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = item.label;
+      actions.append(link);
+    });
+    row.append(copy, actions);
+    return row;
+  }
+
+  function resourceCard(resource) {
+    const state = resolvedState(resource);
+    const changed = statesDiffer(resource, state);
+    const card = document.createElement("article");
+    card.className = `release-card${changed ? " draft-change" : ""}`;
+    card.dataset.resourceId = resource.id;
+
+    const heading = document.createElement("div");
+    heading.className = "release-card-heading";
+    const titleBlock = document.createElement("div");
+    addText(titleBlock, "p", "eyebrow", `${resource.date} · ${resource.eyebrow}`);
+    addText(titleBlock, "h3", "", resource.title);
+    const sync = addText(
+      heading,
+      "span",
+      `sync-chip ${changed ? "pending" : "live"}`,
+      changed ? "Draft change" : "Matches live",
+    );
+    heading.append(titleBlock, sync);
+
+    const controls = document.createElement("div");
+    controls.className = "control-grid";
+    controls.append(
+      labelledSelect("List", "listed", [["true", "On"], ["false", "Off"]], state, resource),
+      labelledSelect("Access", "released", [["true", "Released"], ["false", "Locked"]], state, resource),
+      labelledSelect("Guidance", "guidanceVisible", [["true", "On"], ["false", "Off"]], state, resource),
+      labelledSelect("Placement", "archived", [["false", "Active"], ["true", "Archived"]], state, resource),
+      labelledSelect("Review", "reviewVisible", [["true", "On"], ["false", "Off"]], state, resource),
+    );
+
+    const materials = document.createElement("div");
+    materials.className = "material-sections";
+    const studentHref = resource.files[0]?.href
+      ? new URL(resource.files[0].href, config.studentSite).href
+      : config.studentSite;
+    const teacherHref = config.matchedTeacherFiles?.[resource.id];
+    materials.append(
+      sectionRow(
+        "Class handout",
+        teacherHref ? "Matched learner and teacher routes" : "Student class route",
+        [
+          { label: "Student version", href: studentHref },
+          { label: "Matched teacher version", href: teacherHref },
+        ],
+      ),
+    );
+
+    const homeworkLinks = config.homeworkByResource?.[resource.id] || [];
+    materials.append(
+      sectionRow(
+        "Homework",
+        homeworkLinks.length ? `${homeworkLinks.length} portal task${homeworkLinks.length === 1 ? "" : "s"}` : "No separate portal homework",
+        homeworkLinks.map((item) => ({
+          label: item.label,
+          href: new URL(item.href, config.studentSite).href,
+        })).concat(
+          homeworkLinks.length
+            ? [{ label: "Teacher controls", href: config.homeworkWorkspace }]
+            : [],
+        ),
+      ),
+    );
+
+    const reviewReady = state.reviewVisible && resource.review.trim().length > 0;
+    materials.append(
+      sectionRow(
+        "Class summary",
+        reviewReady ? "Visible on the student class page" : "Hidden",
+        reviewReady ? [{ label: "Open class page", href: studentHref }] : [],
+      ),
+    );
+
+    const footer = document.createElement("div");
+    footer.className = "release-card-footer";
+    addText(footer, "p", "evidence-copy", resource.evidence);
+
+    card.append(heading, controls, materials, footer);
+    return card;
+  }
+
+  function renderBoards() {
+    const activeBoard = document.querySelector("#active-release-board");
+    const archiveBoard = document.querySelector("#archive-release-board");
+    activeBoard.replaceChildren();
+    archiveBoard.replaceChildren();
 
     data.resources.forEach((resource) => {
       const state = resolvedState(resource);
-      const changed = statesDiffer(resource, state);
-      const card = document.createElement("article");
-      card.className = `release-card${changed ? " draft-change" : ""}`;
-      card.dataset.resourceId = resource.id;
-
-      const heading = document.createElement("div");
-      heading.className = "release-card-heading";
-      const titleBlock = document.createElement("div");
-      addText(titleBlock, "p", "eyebrow", `${resource.eyebrow} · ${resource.date}`);
-      addText(titleBlock, "h3", "", resource.title);
-      const sync = addText(
-        heading,
-        "span",
-        `sync-chip ${changed ? "pending" : "live"}`,
-        changed ? "Draft change" : "Matches live",
-      );
-      sync.setAttribute("aria-label", changed ? "Draft differs from live site" : "Draft matches live site");
-      heading.append(titleBlock, sync);
-
-      const controls = document.createElement("div");
-      controls.className = "control-grid";
-      controls.append(
-        labelledSelect("List", "listed", [["true", "On"], ["false", "Off"]], state, resource),
-        labelledSelect("Access", "released", [["true", "Released"], ["false", "Locked"]], state, resource),
-        labelledSelect("Guidance", "guidanceVisible", [["true", "On"], ["false", "Off"]], state, resource),
-        labelledSelect("Placement", "archived", [["false", "Active"], ["true", "Archived"]], state, resource),
-        labelledSelect("Review", "reviewVisible", [["true", "On"], ["false", "Off"]], state, resource),
-      );
-
-      const footer = document.createElement("div");
-      footer.className = "release-card-footer";
-      addText(footer, "p", "evidence-copy", resource.evidence);
-      const routeLinks = document.createElement("div");
-      routeLinks.className = "teacher-route-links";
-      const route = document.createElement("a");
-      route.href = resource.files[0]?.href
-        ? new URL(resource.files[0].href, config.studentSite).href
-        : config.studentSite;
-      route.target = "_blank";
-      route.rel = "noopener";
-      route.textContent = resource.released
-        ? "Open student version"
-        : "Open student portal";
-      routeLinks.append(route);
-      const teacherHref = config.matchedTeacherFiles?.[resource.id];
-      if (teacherHref) {
-        const teacherRoute = document.createElement("a");
-        teacherRoute.href = teacherHref;
-        teacherRoute.target = "_blank";
-        teacherRoute.rel = "noopener";
-        teacherRoute.textContent = "Open matched teacher version";
-        routeLinks.append(teacherRoute);
-      }
-      footer.append(routeLinks);
-
-      card.append(heading, controls, footer);
-      board.append(card);
+      const destination = state.archived ? archiveBoard : activeBoard;
+      destination.append(resourceCard(resource));
     });
+
+    if (!activeBoard.children.length) {
+      addText(activeBoard, "p", "empty-state", "No active class dates.");
+    }
+    if (!archiveBoard.children.length) {
+      addText(
+        archiveBoard,
+        "p",
+        "empty-state",
+        "Archived class dates will appear here with their original subsections.",
+      );
+    }
   }
 
   function handleControlChange(event) {
@@ -177,13 +206,10 @@
       ...resolvedState(resource),
       [select.dataset.field]: select.value === "true",
     };
-    if (statesDiffer(resource, next)) {
-      draft[resource.id] = next;
-    } else {
-      delete draft[resource.id];
-    }
+    if (statesDiffer(resource, next)) draft[resource.id] = next;
+    else delete draft[resource.id];
     saveDraft();
-    renderBoard();
+    renderBoards();
   }
 
   function changePlan() {
@@ -192,7 +218,7 @@
       .map((resource) => ({
         id: resource.id,
         title: resource.title,
-        live: initialState(resource),
+        live: liveState(resource),
         requested: resolvedState(resource),
       }));
   }
@@ -200,7 +226,7 @@
   async function copyPlan() {
     const plan = changePlan();
     const status = document.querySelector("#copy-status");
-    if (plan.length === 0) {
+    if (!plan.length) {
       status.textContent = "No draft changes to copy.";
       return;
     }
@@ -217,25 +243,23 @@
     );
     try {
       await navigator.clipboard.writeText(text);
-      status.textContent = "Change plan copied. Record it in the private control sheet.";
+      status.textContent = "Change plan copied. Record it in the durable control sheet.";
     } catch {
-      status.textContent = "Copy was blocked by the browser. Open the private control sheet instead.";
+      status.textContent = "Copy was blocked. Open the durable control sheet.";
     }
   }
 
   function resetPlan() {
     draft = {};
     localStorage.removeItem(draftKey);
-    renderBoard();
-    document.querySelector("#copy-status").textContent = "Draft reset to the verified live state.";
+    renderBoards();
+    document.querySelector("#copy-status").textContent =
+      "Draft reset to the verified live state.";
   }
 
   function bindLinks() {
     document.querySelectorAll("[data-private-link]").forEach((link) => {
       link.href = config[link.dataset.privateLink];
-    });
-    document.querySelectorAll("[data-private-booster-link]").forEach((link) => {
-      link.href = config.matchedBoosterFiles[link.dataset.privateBoosterLink];
     });
   }
 
@@ -253,16 +277,15 @@
         target.textContent = config.verifiedCommit;
       }
     } catch {
-      // Keep the honest fallback when the public GitHub API is unavailable.
+      // Keep the fallback when the public GitHub API is unavailable.
     }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     bindLinks();
-    renderSummary();
-    renderBoard();
+    renderBoards();
     loadVerifiedCommit();
-    document.querySelector("#release-board").addEventListener("change", handleControlChange);
+    document.body.addEventListener("change", handleControlChange);
     document.querySelector("#copy-plan").addEventListener("click", copyPlan);
     document.querySelector("#reset-plan").addEventListener("click", resetPlan);
     document.querySelector("#lock-teacher-portal").addEventListener("click", () => {

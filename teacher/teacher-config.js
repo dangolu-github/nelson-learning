@@ -9,6 +9,8 @@ window.NELSON_TEACHER_PORTAL = {
     "https://docs.google.com/spreadsheets/d/1n8OyG6xl5GCt1OE_TQU2r1248ZhJciBR-qiAR3-TDGY/edit",
   homeworkResponses:
     "https://docs.google.com/spreadsheets/d/1l8e8pWsoAcsFx3SEIuWetYfjARnvoNHlx00_DAZUaYA/edit#gid=868856990",
+  homeworkWorkspace:
+    "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec",
   lessonReveals:
     "https://docs.google.com/spreadsheets/d/1l8e8pWsoAcsFx3SEIuWetYfjARnvoNHlx00_DAZUaYA/edit#gid=291385662",
   readingAnswerKey:
@@ -17,7 +19,23 @@ window.NELSON_TEACHER_PORTAL = {
     "https://drive.google.com/drive/folders/1AcZfi0PmmLwdRS2gaFSV4bHAS2hJ3Ktg",
   matchedTeacherFiles: {
     "class-3-change-continuation":
-      "https://drive.google.com/file/d/133N3YQDP36HO0MPnQ6oYq69tj2NVLnfT/view",
+      "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=class3",
+  },
+  homeworkByResource: {
+    "class-3-change-continuation": [
+      {
+        label: "Reading",
+        href: "2026-07-24/homework-reading/",
+      },
+      {
+        label: "Trend practice",
+        href: "2026-07-24/homework-trends/",
+      },
+      {
+        label: "Grammar",
+        href: "2026-07-24/homework-grammar/",
+      },
+    ],
   },
   matchedBoosterFiles: {
     grammar:

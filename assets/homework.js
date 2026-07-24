@@ -17,6 +17,7 @@
   let submitted = Boolean(state.submittedAt);
 
   installStatus();
+  installTeacherReview();
   restoreFields();
   updateStatus();
   bindFields();
@@ -174,7 +175,13 @@
       "getAssignmentState",
       { assignmentId: page.assignmentId },
       (data) => {
-        if (data?.ok && data.receiving === false) lockPage("Receiving is currently paused.");
+        if (!data?.ok) return;
+        if (data.archived === true) {
+          lockPage("This homework is archived. Your submitted work remains available.");
+        } else if (data.receiving === false) {
+          lockPage("Receiving is currently paused.");
+        }
+        if (submitted) checkTeacherReview();
       },
       () => setSaveText("Saved locally · assignment status unavailable"),
     );
@@ -229,6 +236,7 @@
             // Submission is already confirmed by the server.
           }
           lockPage(`Submitted successfully · ${data.answeredCount} answers received`);
+          checkTeacherReview();
           return;
         }
         if (attempt < 10) {
@@ -284,6 +292,58 @@
     }
     box.textContent = message;
     box.classList.toggle("is-error", Boolean(isError));
+  }
+
+  function installTeacherReview() {
+    const panel = document.createElement("section");
+    panel.className = "teacher-review";
+    panel.hidden = true;
+    panel.setAttribute("aria-live", "polite");
+    panel.innerHTML = `
+      <div class="teacher-review-heading">
+        <div>
+          <p class="eyebrow">Teacher review</p>
+          <h2>Checked feedback</h2>
+        </div>
+        <span class="teacher-review-chip">Checked</span>
+      </div>
+      <div class="teacher-review-content"></div>`;
+    document.querySelector(".homework-document").append(panel);
+  }
+
+  function checkTeacherReview() {
+    jsonp(
+      "getHomeworkReview",
+      { submissionId: state.saveId, assignmentId: page.assignmentId },
+      (data) => {
+        if (!data?.ok || data.pending) return;
+        renderTeacherReview(data);
+      },
+      () => {
+        // The submitted work remains confirmed when review is temporarily unavailable.
+      },
+    );
+  }
+
+  function renderTeacherReview(data) {
+    const panel = document.querySelector(".teacher-review");
+    const content = panel.querySelector(".teacher-review-content");
+    content.replaceChildren();
+    [
+      ["Checked result", data.result],
+      ["Teacher comment", data.comment],
+      ["Explanation", data.explanation],
+    ].forEach(([label, value]) => {
+      if (!String(value || "").trim()) return;
+      const item = document.createElement("article");
+      const heading = document.createElement("h3");
+      const copy = document.createElement("p");
+      heading.textContent = label;
+      copy.textContent = value;
+      item.append(heading, copy);
+      content.append(item);
+    });
+    panel.hidden = content.children.length === 0;
   }
 
   function setSaveText(text) {
