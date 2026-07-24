@@ -34,7 +34,7 @@
 
   function resourceCard(resource) {
     const guidance =
-      resource.guidance && resource.released
+      resource.guidanceVisible && resource.guidance && resource.released
         ? `<div class="guidance-box"><strong>How to use it</strong><p>${resource.guidance}</p></div>`
         : "";
     return `
@@ -99,4 +99,3 @@
     window.location.reload();
   });
 })();
-

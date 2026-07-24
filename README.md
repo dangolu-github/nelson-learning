@@ -1,9 +1,12 @@
 # Nelson English Learning
 
-Static student portal for Nelson's IELTS-standard B1-B2 English course.
+Static student portal and public-safe teacher operations page for Nelson's
+IELTS-standard B1-B2 English course.
 
-- GitHub Pages contains student materials only.
+- Student routes contain released student materials only.
+- `/teacher/` mirrors public release state and provides links into
+  Google-authenticated private administration.
 - Teacher notes, answer keys, trackers, and administration records stay outside this repository.
+- Private Google files remain owner-only; their links do not grant access.
 - The access screen is a low-friction device gate. GitHub Pages is static, so it is not strong file-level authentication.
 - Course evidence states remain controlled by the Nelson course index and checked learner work.
-

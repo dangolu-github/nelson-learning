@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="description" content="Nelson portal release controls">
+  <title>Nelson · Teacher Portal</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="teacher.css">
+  <script src="../assets/portal-data.js" defer></script>
+  <script src="teacher-config.js" defer></script>
+  <script src="teacher-access.js" defer></script>
+  <script src="teacher.js" defer></script>
+</head>
+<body>
+  <main class="teacher-shell protected-page" hidden>
+    <header class="teacher-hero">
+      <div>
+        <p class="eyebrow">Nelson · IELTS/B2</p>
+        <h1>Teacher portal</h1>
+        <p class="hero-copy">
+          Review the student site, plan release changes, and open the protected
+          course controls from one place.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <a class="primary-action" data-private-link="controlSheet" target="_blank" rel="noopener">Open private controls</a>
+        <button id="lock-teacher-portal" class="quiet-action" type="button">Lock portal</button>
+      </div>
+    </header>
+
+    <section class="boundary-note" aria-labelledby="boundary-title">
+      <div>
+        <p class="eyebrow">Access boundary</p>
+        <h2 id="boundary-title">GitHub view, Google protection</h2>
+      </div>
+      <p>
+        This GitHub page contains public-safe release information only. Teacher
+        notes, answer keys, learner records, and editable controls remain in
+        owner-only Google files. Changes drafted here are not live until the
+        GitHub publication is completed and verified.
+      </p>
+    </section>
+
+    <section class="quick-links" aria-label="Teacher workspaces">
+      <a data-private-link="studentSite" target="_blank" rel="noopener">
+        <span>Student site</span><strong>Open live portal</strong>
+      </a>
+      <a data-private-link="controlSheet" target="_blank" rel="noopener">
+        <span>Release controls</span><strong>Open private sheet</strong>
+      </a>
+      <a data-private-link="courseTracker" target="_blank" rel="noopener">
+        <span>Course tracker</span><strong>Open evidence record</strong>
+      </a>
+      <a data-private-link="teacherMaterials" target="_blank" rel="noopener">
+        <span>Teacher materials</span><strong>Open protected folder</strong>
+      </a>
+    </section>
+
+    <section class="status-section" aria-labelledby="status-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Live student state</p>
+          <h2 id="status-title">Release overview</h2>
+        </div>
+        <div class="commit-chip">
+          <span>Verified commit</span>
+          <strong id="verified-commit">Loading…</strong>
+        </div>
+      </div>
+      <div id="summary-cards" class="summary-cards"></div>
+    </section>
+
+    <section class="control-section" aria-labelledby="control-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Planning surface</p>
+          <h2 id="control-title">Classes and release controls</h2>
+        </div>
+        <div class="plan-actions">
+          <button id="reset-plan" class="quiet-action dark" type="button">Reset draft</button>
+          <button id="copy-plan" class="primary-action" type="button">Copy change plan</button>
+        </div>
+      </div>
+      <p class="planning-note">
+        You can test intended settings below. They are saved only on this
+        device. Use the private control sheet for the durable request, then
+        publish and verify GitHub before calling a change live.
+      </p>
+      <div id="release-board" class="release-board"></div>
+      <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <footer>
+      <span>Nelson Teacher Portal</span>
+      <span>Plan · publish · verify · record</span>
+    </footer>
+  </main>
+</body>
+</html>

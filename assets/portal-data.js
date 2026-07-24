@@ -20,6 +20,7 @@ window.NELSON_PORTAL_DATA = {
       evidence: "Completed in class · follow-up assigned",
       listed: true,
       released: true,
+      guidanceVisible: true,
       archived: true,
       files: [
         {
@@ -43,6 +44,7 @@ window.NELSON_PORTAL_DATA = {
       evidence: "Completed in class · writing reviewed on 22 July",
       listed: true,
       released: true,
+      guidanceVisible: true,
       archived: false,
       files: [
         {
@@ -66,6 +68,7 @@ window.NELSON_PORTAL_DATA = {
       evidence: "Exercise 1 completed · three practices assigned",
       listed: true,
       released: true,
+      guidanceVisible: true,
       archived: false,
       files: [
         {
@@ -88,6 +91,7 @@ window.NELSON_PORTAL_DATA = {
       evidence: "Prepared · not yet taught or assigned",
       listed: true,
       released: false,
+      guidanceVisible: false,
       archived: false,
       files: [],
       review: "",
@@ -95,4 +99,3 @@ window.NELSON_PORTAL_DATA = {
     },
   ],
 };
-
