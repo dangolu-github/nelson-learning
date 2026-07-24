@@ -22,33 +22,43 @@
       <p>We reviewed the previous homework answers first, then traced each cafe line and read approximate values from the axes.</p>
     </section>
     <section class="class-card">
-      <p class="eyebrow">Learning handout · Native HTML</p>
+      <p class="eyebrow">Class handout</p>
       <h2>Change and Consequences</h2>
-      <p>Read the axes and trace each cafe line. Answers and explanations appear beside the matching question only when the teacher enables them.</p>
+      <p>We reviewed the previous homework answers and completed <em>Read the axes and trace the lines</em>, Questions A–F. Continue next time from Section 4.</p>
       <a class="open-button" href="learning-handout.html">Open learning handout</a>
     </section>
     <section class="class-card">
-      <h2>Class boundary</h2>
-      <ul>
-        <li>Reviewed: answers to the three previous homework activities.</li>
-        <li>Completed in class: <em>Read the axes and trace the lines</em>, Questions A–F.</li>
-        <li>Continue next time: Section 4, <em>Notice, Say, and Build</em>.</li>
-        <li>No later speaking, overview, new-data, or transfer section is recorded as taught.</li>
-      </ul>
-    </section>
-    <section class="class-card">
-      <p class="eyebrow">Assigned homework</p>
-      <h2>Three tasks</h2>
-      <div class="resource-list">
-        <a class="resource-row" href="homework-reading/"><span class="resource-copy"><strong>Homework 1 · B1 Reading</strong><span>Two official online texts with short B1 question types and direct submission.</span></span><span class="resource-meta">46 responses</span><span class="resource-arrow">→</span></a>
-        <a class="resource-row" href="homework-trends/"><span class="resource-copy"><strong>Homework 2 · Describe Change Clearly</strong><span>20 guided choices, gap fills, and sentence-building questions.</span></span><span class="resource-meta">20 questions</span><span class="resource-arrow">→</span></a>
-        <a class="resource-row" href="homework-grammar/"><span class="resource-copy"><strong>Homework 3 · Grammar Book</strong><span>Exercises 1.4, 2.2, 2.3, and 2.5 with answer-entry spaces.</span></span><span class="resource-meta">4 exercises</span><span class="resource-arrow">→</span></a>
+      <p class="eyebrow">Homework</p>
+      <h2>Three assignments</h2>
+      <p>Open each task below. Your answers save on the page and can be submitted to the teacher portal.</p>
+      <div class="homework-assignment-grid">
+        <a class="homework-assignment" href="homework-reading/">
+          <span class="homework-number">01</span>
+          <p class="eyebrow">B1 Reading</p>
+          <h3>Two Online Texts</h3>
+          <p>Read two official British Council texts and complete the objective questions.</p>
+          <strong>Open Homework 1 →</strong>
+        </a>
+        <a class="homework-assignment" href="homework-trends/">
+          <span class="homework-number">02</span>
+          <p class="eyebrow">Writing and grammar</p>
+          <h3>Describe Change Clearly</h3>
+          <p>Complete 20 guided choices, gap fills, and sentence-building questions.</p>
+          <strong>Open Homework 2 →</strong>
+        </a>
+        <a class="homework-assignment" href="homework-grammar/">
+          <span class="homework-number">03</span>
+          <p class="eyebrow">Grammar book</p>
+          <h3>Exercises 1.4, 2.2, 2.3, and 2.5</h3>
+          <p>Open the grammar book, complete the four exercises, and submit the numbered answers.</p>
+          <strong>Open Homework 3 →</strong>
+        </a>
       </div>
     </section>
-    <section id="class-review-card" class="class-card" hidden>
-      <p class="eyebrow">Review</p>
-      <h2>Class review</h2>
-      <p id="class-review-copy" class="review-copy"></p>
+    <section id="class-summary-card" class="class-card" hidden>
+      <p class="eyebrow">Class summary</p>
+      <h2>Class summary</h2>
+      <p id="class-summary-copy" class="review-copy"></p>
     </section>
   </main>
   <script>
@@ -57,8 +67,8 @@
         return item.id === "class-3-change-continuation";
       });
       if (resource && resource.reviewVisible && resource.review.trim()) {
-        document.querySelector("#class-review-copy").textContent = resource.review;
-        document.querySelector("#class-review-card").hidden = false;
+        document.querySelector("#class-summary-copy").textContent = resource.review;
+        document.querySelector("#class-summary-card").hidden = false;
       }
     });
   </script>

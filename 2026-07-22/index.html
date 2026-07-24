@@ -22,7 +22,8 @@
       <p>The submitted writing was corrected first. Exercise 1 was completed in class, and three later practices were assigned.</p>
     </section>
     <section class="class-card">
-      <h2>Class files</h2>
+      <p class="eyebrow">Class handout</p>
+      <h2>Class materials</h2>
       <div class="file-grid">
         <article class="file-card">
           <p class="eyebrow">Learning handout</p>
@@ -39,6 +40,7 @@
       </div>
     </section>
     <section class="class-card">
+      <p class="eyebrow">Homework</p>
       <h2>Assigned practice</h2>
       <ol>
         <li>Notice the strength.</li>
@@ -46,10 +48,10 @@
         <li>Exercise 2 — Make the noun phrase compact.</li>
       </ol>
     </section>
-    <section id="class-review-card" class="class-card" hidden>
-      <p class="eyebrow">Review</p>
-      <h2>Class review</h2>
-      <p id="class-review-copy" class="review-copy"></p>
+    <section id="class-summary-card" class="class-card" hidden>
+      <p class="eyebrow">Class summary</p>
+      <h2>Class summary</h2>
+      <p id="class-summary-copy" class="review-copy"></p>
     </section>
   </main>
   <script>
@@ -58,8 +60,8 @@
         return item.id === "class-2-change-takeaway-1";
       });
       if (resource && resource.reviewVisible && resource.review.trim()) {
-        document.querySelector("#class-review-copy").textContent = resource.review;
-        document.querySelector("#class-review-card").hidden = false;
+        document.querySelector("#class-summary-copy").textContent = resource.review;
+        document.querySelector("#class-summary-card").hidden = false;
       }
     });
   </script>

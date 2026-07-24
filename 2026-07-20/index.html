@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Class 1 · Reading to Writing</title>
+  <title>Class 1 · Practical-Activities Writing</title>
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/site.css">
+  <script src="../assets/portal-data.js" defer></script>
   <script src="../assets/config.js" defer></script>
   <script src="../assets/access-gate.js" defer></script>
 </head>
@@ -13,18 +14,41 @@
   <main class="class-page protected-page" hidden>
     <nav class="class-toolbar">
       <a href="../index.html">Back to portal</a>
-      <button type="button" onclick="window.print()">Save as PDF</button>
+      <button type="button" onclick="window.print()">Save class page as PDF</button>
     </nav>
     <section class="class-hero">
       <p class="eyebrow">Class 1 · 20 July 2026</p>
-      <h1>Reading to Writing — Reused for Writing</h1>
-      <p>The trial lesson handout was reused to teach the practical-activities writing prompt.</p>
+      <h1>Practical-Activities Writing</h1>
+      <p>The trial lesson handout was reused to practise a clear position, reason, and example.</p>
     </section>
     <section class="class-card">
-      <h2>Learning material</h2>
-      <p>Return to the familiar position, reason, and example route. Use the idea support without copying its wording.</p>
-      <a class="open-button" href="../2026-07-13/learning-handout.html">Open reused handout</a>
+      <p class="eyebrow">Class handout</p>
+      <h2>Reading to Writing</h2>
+      <p>Return to the familiar position–reason–example route in the trial lesson handout.</p>
+      <a class="open-button" href="../2026-07-13/learning-handout.html">Open reused class handout</a>
+    </section>
+    <section class="class-card">
+      <p class="eyebrow">Homework</p>
+      <h2>Practical-activities response</h2>
+      <p>Write a response to the practical-activities prompt in the handout. Use the offered ideas for support without copying the model wording.</p>
+      <a class="open-button" href="../2026-07-13/learning-handout.html">Open the writing prompt</a>
+    </section>
+    <section id="class-summary-card" class="class-card" hidden>
+      <p class="eyebrow">Class summary</p>
+      <h2>Class summary</h2>
+      <p id="class-summary-copy" class="review-copy"></p>
     </section>
   </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var resource = window.NELSON_PORTAL_DATA.resources.find(function (item) {
+        return item.id === "class-1-writing-reuse";
+      });
+      if (resource && resource.reviewVisible && resource.review.trim()) {
+        document.querySelector("#class-summary-copy").textContent = resource.review;
+        document.querySelector("#class-summary-card").hidden = false;
+      }
+    });
+  </script>
 </body>
 </html>

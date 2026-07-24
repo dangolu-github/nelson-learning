@@ -6,6 +6,7 @@
   <title>Class 0 · Make Your Proof Visible</title>
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/site.css">
+  <script src="../assets/portal-data.js" defer></script>
   <script src="../assets/config.js" defer></script>
   <script src="../assets/access-gate.js" defer></script>
 </head>
@@ -21,10 +22,33 @@
       <p>Use exact reading evidence, notice paraphrases, and build one developed paragraph from a clear plan.</p>
     </section>
     <section class="class-card">
-      <h2>Learning material</h2>
+      <p class="eyebrow">Class handout</p>
+      <h2>Reading to Writing</h2>
       <p>Open the complete reading-to-writing learning handout.</p>
       <a class="open-button" href="learning-handout.html">Open learning handout</a>
     </section>
+    <section class="class-card">
+      <p class="eyebrow">Homework</p>
+      <h2>Reading evidence and one paragraph</h2>
+      <p>Complete Reading Questions 3–5 with short proof notes, write one paragraph of about 100 words, and review the lesson vocabulary in context.</p>
+      <a class="open-button" href="learning-handout.html">Open the homework material</a>
+    </section>
+    <section id="class-summary-card" class="class-card" hidden>
+      <p class="eyebrow">Class summary</p>
+      <h2>Class summary</h2>
+      <p id="class-summary-copy" class="review-copy"></p>
+    </section>
   </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var resource = window.NELSON_PORTAL_DATA.resources.find(function (item) {
+        return item.id === "class-0-reading-to-writing";
+      });
+      if (resource && resource.reviewVisible && resource.review.trim()) {
+        document.querySelector("#class-summary-copy").textContent = resource.review;
+        document.querySelector("#class-summary-card").hidden = false;
+      }
+    });
+  </script>
 </body>
 </html>

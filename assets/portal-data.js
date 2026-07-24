@@ -1,11 +1,5 @@
 window.NELSON_PORTAL_DATA = {
   updated: "2026-07-24",
-  week: {
-    number: "01",
-    dates: "20–24 July",
-    title: "Change, evidence, and clear sentences",
-    focus: "Writing main",
-  },
   resources: [
     {
       id: "class-0-reading-to-writing",
@@ -13,19 +7,18 @@ window.NELSON_PORTAL_DATA = {
       date: "13 July 2026",
       title: "Make Your Proof Visible",
       skills: ["Reading", "Writing"],
-      summary:
-        "Use exact reading evidence, notice paraphrases, and build one developed paragraph from a clear plan.",
+      summary: "Reading evidence and one clear paragraph.",
       guidance:
         "Review the T/F/NG decision route, then plan in keywords before writing. The reading proof and the paragraph are separate tasks.",
       evidence: "Completed in class · follow-up assigned",
       listed: true,
       released: true,
       guidanceVisible: true,
-      archived: true,
+      archived: false,
       files: [
         {
-          label: "Open learning handout",
-          href: "2026-07-13/learning-handout.html",
+          label: "Open class page",
+          href: "2026-07-13/",
         },
       ],
       review: "",
@@ -37,8 +30,7 @@ window.NELSON_PORTAL_DATA = {
       date: "20 July 2026",
       title: "Reading to Writing — Reused for Writing",
       skills: ["Writing"],
-      summary:
-        "Reuse the trial lesson’s position, reason, and example route to answer the practical-activities prompt.",
+      summary: "Reused the trial handout for practical-activities writing.",
       guidance:
         "Open the familiar handout, move to the paragraph section, and use the idea support without copying its wording.",
       evidence: "Completed in class · writing reviewed on 22 July",
@@ -48,8 +40,8 @@ window.NELSON_PORTAL_DATA = {
       archived: false,
       files: [
         {
-          label: "Open reused handout",
-          href: "2026-07-13/learning-handout.html",
+          label: "Open class page",
+          href: "2026-07-20/",
         },
       ],
       review: "",
@@ -61,8 +53,7 @@ window.NELSON_PORTAL_DATA = {
       date: "22 July 2026",
       title: "Change and Consequences — Takeaway 1",
       skills: ["Writing", "Grammar"],
-      summary:
-        "Correct the previous writing, recognise eight trend shapes, and practise accurate adjective, adverb, verb, and noun forms.",
+      summary: "Writing correction and trend-language practice.",
       guidance:
         "Completed in class: Exercise 1, Match the eight trend shapes. Homework: Notice the strength; Change the grammar, keep the meaning; and Exercise 2, Make the noun phrase compact.",
       evidence: "Exercise 1 completed · three practices assigned",
@@ -85,8 +76,7 @@ window.NELSON_PORTAL_DATA = {
       date: "24 July 2026",
       title: "Change and Consequences — Read the Axes and Trace the Lines",
       skills: ["Writing", "Speaking", "Reading", "Grammar"],
-      summary:
-        "Review the previous homework answers, identify each cafe line, trace it to the requested month, and read an approximate value from the vertical scale.",
+      summary: "Read the axes and trace the cafe lines.",
       guidance:
         "Completed together: the previous homework answer review and Questions A–F under Read the axes and trace the lines. Continue next time from Section 4, Notice, Say, and Build. Later sections remain available for continuity but are not recorded as completed.",
       evidence: "Homework answers reviewed · axes-and-lines Questions A–F taught",
@@ -96,8 +86,8 @@ window.NELSON_PORTAL_DATA = {
       archived: false,
       files: [
         {
-          label: "Open learning handout",
-          href: "2026-07-24/learning-handout.html",
+          label: "Open class page",
+          href: "2026-07-24/",
         },
       ],
       review: "",
