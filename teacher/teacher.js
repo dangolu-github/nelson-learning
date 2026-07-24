@@ -141,14 +141,28 @@
       const footer = document.createElement("div");
       footer.className = "release-card-footer";
       addText(footer, "p", "evidence-copy", resource.evidence);
+      const routeLinks = document.createElement("div");
+      routeLinks.className = "teacher-route-links";
       const route = document.createElement("a");
       route.href = resource.files[0]?.href
         ? new URL(resource.files[0].href, config.studentSite).href
         : config.studentSite;
       route.target = "_blank";
       route.rel = "noopener";
-      route.textContent = resource.released ? "Open student route" : "Open student portal";
-      footer.append(route);
+      route.textContent = resource.released
+        ? "Open student version"
+        : "Open student portal";
+      routeLinks.append(route);
+      const teacherHref = config.matchedTeacherFiles?.[resource.id];
+      if (teacherHref) {
+        const teacherRoute = document.createElement("a");
+        teacherRoute.href = teacherHref;
+        teacherRoute.target = "_blank";
+        teacherRoute.rel = "noopener";
+        teacherRoute.textContent = "Open matched teacher version";
+        routeLinks.append(teacherRoute);
+      }
+      footer.append(routeLinks);
 
       card.append(heading, controls, footer);
       board.append(card);

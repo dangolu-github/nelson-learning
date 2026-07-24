@@ -81,19 +81,25 @@ window.NELSON_PORTAL_DATA = {
     },
     {
       id: "class-3-change-continuation",
-      eyebrow: "Class 3 · Next lesson",
+      eyebrow: "Class 3",
       date: "24 July 2026",
-      title: "Change and Consequences — Continue with A-P-C",
+      title: "Change and Consequences — Read the Cafe Graph",
       skills: ["Writing", "Speaking", "Reading", "Grammar"],
       summary:
-        "Check the assigned language work, select important graph features, rehearse them aloud, and transfer the pattern to new data.",
-      guidance: "",
-      evidence: "Prepared · not yet taught or assigned",
+        "Review the previous homework answers, read the cafe graph accurately, and prepare to move from visual evidence to clear spoken and written comparisons.",
+      guidance:
+        "Completed together: the previous homework answer review and Section 3, Read the Cafe Graph. Continue next time from Section 4, Notice, Say, and Build. Later sections remain available for continuity but are not recorded as completed.",
+      evidence: "Homework answers reviewed · Cafe Graph section completed",
       listed: true,
-      released: false,
-      guidanceVisible: false,
+      released: true,
+      guidanceVisible: true,
       archived: false,
-      files: [],
+      files: [
+        {
+          label: "Open Class 3 page",
+          href: "2026-07-24/index.html",
+        },
+      ],
       review: "",
       reviewVisible: false,
     },

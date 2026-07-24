@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Class 3 · Read the Cafe Graph</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css">
+  <script src="../assets/portal-data.js" defer></script>
+  <script src="../assets/access-gate.js" defer></script>
+</head>
+<body>
+  <main class="class-page protected-page" hidden>
+    <nav class="class-toolbar">
+      <a href="../index.html">Back to portal</a>
+      <button type="button" onclick="window.print()">Save class page as PDF</button>
+    </nav>
+    <section class="class-hero">
+      <p class="eyebrow">Class 3 · 24 July 2026</p>
+      <h1>Change and Consequences — Read the Cafe Graph</h1>
+      <p>We reviewed the previous homework answers first, then completed the graph-reading questions in Section 3.</p>
+    </section>
+    <section class="class-card">
+      <p class="eyebrow">Learning handout · Native HTML</p>
+      <h2>Change and Consequences</h2>
+      <p>Read the axes, trace each cafe line, and use the A-P-C routine to prepare the next graph-writing step.</p>
+      <a class="open-button" href="learning-handout.html">Open learning handout</a>
+    </section>
+    <section class="class-card">
+      <h2>Class boundary</h2>
+      <ul>
+        <li>Reviewed: answers to the three previous homework activities.</li>
+        <li>Completed in class: Section 3, <em>Read the Cafe Graph</em>.</li>
+        <li>Continue next time: Section 4, <em>Notice, Say, and Build</em>.</li>
+        <li>The weekend Reading route remains prepared, not assigned.</li>
+      </ul>
+    </section>
+    <section id="class-review-card" class="class-card" hidden>
+      <p class="eyebrow">Review</p>
+      <h2>Class review</h2>
+      <p id="class-review-copy" class="review-copy"></p>
+    </section>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var resource = window.NELSON_PORTAL_DATA.resources.find(function (item) {
+        return item.id === "class-3-change-continuation";
+      });
+      if (resource && resource.reviewVisible && resource.review.trim()) {
+        document.querySelector("#class-review-copy").textContent = resource.review;
+        document.querySelector("#class-review-card").hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

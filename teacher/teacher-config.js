@@ -9,4 +9,8 @@ window.NELSON_TEACHER_PORTAL = {
     "https://docs.google.com/spreadsheets/d/1n8OyG6xl5GCt1OE_TQU2r1248ZhJciBR-qiAR3-TDGY/edit",
   teacherMaterials:
     "https://drive.google.com/drive/folders/1AcZfi0PmmLwdRS2gaFSV4bHAS2hJ3Ktg",
+  matchedTeacherFiles: {
+    "class-3-change-continuation":
+      "https://drive.google.com/file/d/133N3YQDP36HO0MPnQ6oYq69tj2NVLnfT/view",
+  },
 };

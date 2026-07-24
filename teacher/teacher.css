@@ -229,6 +229,7 @@ a { color: inherit; }
 .release-card-footer { align-items: center; padding-top: 16px; border-top: 1px solid var(--line); }
 .evidence-copy { margin-bottom: 0; color: var(--muted); font-size: .86rem; line-height: 1.5; }
 .release-card-footer a { color: var(--rust); font-weight: 900; white-space: nowrap; }
+.teacher-route-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 14px; }
 .copy-status { min-height: 24px; margin: 18px 0 0; color: var(--teal); font-weight: 800; }
 
 footer {
@@ -262,5 +263,6 @@ footer {
   }
   .plan-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
   .release-card-footer a { white-space: normal; }
+  .teacher-route-links { justify-content: flex-start; }
   footer { flex-direction: column; }
 }
