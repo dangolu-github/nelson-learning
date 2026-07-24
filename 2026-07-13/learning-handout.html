@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Reading to Writing | Nelson Learning</title>
+  <link rel="stylesheet" href="../assets/access-gate.css">
+  <script src="../assets/access-gate.js" defer></script>
+  <style>
+    :root {
+      --ink: #17211f;
+      --muted: #586460;
+      --paper: #f6f8f5;
+      --surface: #ffffff;
+      --line: #cbd8d2;
+      --teal: #0a6a5a;
+      --teal-dark: #064a40;
+      --teal-soft: #e2f1ec;
+      --gold: #a86a16;
+      --gold-soft: #fff1d8;
+      --blue-soft: #e8f1f8;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    html {
+      background: var(--paper); color: var(--ink);
+      font-family: "Avenir Next", Avenir, "Helvetica Neue", Arial, sans-serif;
+      font-size: 16px; line-height: 1.56;
+    }
+    body { margin: 0; }
+    main { width: min(1080px, calc(100% - 30px)); margin: 0 auto; padding: 30px 0 64px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(2.3rem, 6vw, 4.8rem); line-height: 0.98; letter-spacing: -0.05em; max-width: 850px; }
+    h2 { font-size: clamp(1.45rem, 3vw, 2.05rem); line-height: 1.15; letter-spacing: -0.025em; }
+    h3 { font-size: 1.03rem; margin-bottom: 7px; }
+    p { max-width: 78ch; }
+    .topline, footer {
+      display: flex; justify-content: space-between; gap: 18px; align-items: baseline;
+      font-size: 0.8rem; font-weight: 800; color: var(--muted);
+    }
+    .topline { border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 38px; }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(240px, 0.55fr); gap: 36px; align-items: end; }
+    .hero p { color: var(--muted); font-size: 1.08rem; }
+    .goal { background: var(--teal-dark); color: #f6fffb; border-radius: var(--radius); padding: 21px; }
+    .goal span { display: block; color: #c9e9df; font-size: 0.82rem; }
+    .goal strong { display: block; font-size: 1.35rem; line-height: 1.22; margin-top: 7px; }
+    .route { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 34px 0 48px; }
+    .route div { background: var(--teal-soft); border-radius: 11px; padding: 14px; min-height: 95px; }
+    .route b { display: block; color: var(--teal-dark); font-size: 1.08rem; margin-bottom: 4px; }
+    .route span { color: var(--muted); font-size: 0.82rem; }
+    section { border-top: 1px solid var(--line); margin-top: 45px; padding-top: 22px; }
+    .section-intro { color: var(--muted); margin-bottom: 18px; }
+    .prompt { background: var(--surface); border-left: 5px solid var(--teal); border-radius: 0 var(--radius) var(--radius) 0; padding: 17px 20px; }
+    .write-lines { min-height: 100px; border-radius: var(--radius); margin-top: 14px; padding: 14px 16px; background: repeating-linear-gradient(to bottom, var(--surface) 0, var(--surface) 30px, #d9e2de 31px); }
+    .routine { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .routine article { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 17px; }
+    .routine article:nth-child(1) { border-top: 5px solid var(--teal); }
+    .routine article:nth-child(2) { border-top: 5px solid var(--gold); }
+    .routine article:nth-child(3) { border-top: 5px solid #426e96; }
+    .routine strong { display: block; font-size: 1.22rem; margin-bottom: 5px; }
+    .mini-example { margin-top: 15px; background: var(--gold-soft); border-radius: var(--radius); padding: 17px; }
+    .mini-example p:last-child { margin-bottom: 0; }
+    .passage { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+    .passage p:last-child { margin-bottom: 0; }
+    .questions { display: grid; gap: 12px; margin-top: 17px; }
+    .question { background: var(--surface); border: 1px solid var(--line); border-radius: 11px; padding: 14px 16px; }
+    .question b { color: var(--teal-dark); }
+    .answer-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; margin-top: 9px; color: var(--muted); font-size: 0.86rem; }
+    .blank { border-bottom: 1.5px solid #80918b; min-height: 24px; }
+    .proof-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; }
+    .proof-table th { background: var(--teal-dark); color: #f5fffb; text-align: left; padding: 11px; }
+    .proof-table td { border-bottom: 1px solid var(--line); padding: 11px; height: 54px; vertical-align: top; }
+    .proof-table tr:last-child td { border-bottom: 0; }
+    .chain { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin: 17px 0; }
+    .chain div { background: var(--teal-soft); border-radius: 10px; padding: 13px; min-height: 105px; }
+    .chain b { color: var(--teal-dark); display: block; margin-bottom: 5px; }
+    .model { background: var(--blue-soft); border-radius: var(--radius); padding: 20px; }
+    .notice { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+    .notice div { background: var(--surface); border: 1px solid var(--line); border-radius: 9px; padding: 12px; min-height: 82px; }
+    .plan-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .plan-grid div { background: var(--surface); border: 1px solid var(--line); border-radius: 11px; padding: 14px; min-height: 92px; }
+    .plan-grid b { color: var(--teal-dark); }
+    .independent { background: var(--teal-dark); color: #f6fffb; border-radius: var(--radius); padding: 20px; }
+    .independent p { color: #d0e9e2; }
+    .independent .write-lines { min-height: 230px; background: repeating-linear-gradient(to bottom, #fff 0, #fff 31px, #cad6d2 32px); color: var(--ink); }
+    .bank-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 14px; }
+    .bank { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 17px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chips span { background: var(--teal-soft); color: var(--teal-dark); border-radius: 999px; padding: 7px 10px; font-size: 0.86rem; }
+    .learning-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; }
+    .learning-table th { background: var(--teal-dark); color: #f5fffb; text-align: left; padding: 11px; }
+    .learning-table td { border-bottom: 1px solid var(--line); padding: 11px; vertical-align: top; }
+    .learning-table tr:last-child td { border-bottom: 0; }
+    .learning-table td:first-child { width: 19%; color: var(--teal-dark); font-weight: 800; }
+    .learning-table td:nth-child(2) { width: 36%; }
+    .idea-bank { margin-top: 18px; }
+    .retrieval-box { margin-top: 16px; background: var(--gold-soft); border-left: 5px solid var(--gold); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 18px; }
+    .retrieval-box ol { margin-bottom: 0; padding-left: 21px; }
+    .checklist { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-top: 15px; }
+    .checklist div { background: var(--gold-soft); border-radius: 9px; padding: 11px; font-size: 0.86rem; }
+    footer { border-top: 2px solid var(--ink); padding-top: 11px; margin-top: 44px; }
+    @media (max-width: 760px) {
+      .hero, .bank-grid { grid-template-columns: 1fr; }
+      .route { grid-template-columns: repeat(2, 1fr); }
+      .routine, .notice { grid-template-columns: 1fr; }
+      .chain, .checklist { grid-template-columns: repeat(2, 1fr); }
+      .answer-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 460px) {
+      main { width: calc(100% - 20px); }
+      .route, .chain, .plan-grid, .checklist { grid-template-columns: 1fr; }
+      .topline, footer { display: block; }
+      .topline span, footer span { display: block; }
+      h1 { font-size: 2.25rem; }
+    }
+    .portal-toolbar {
+      position: sticky; top: 0; z-index: 20; display: flex; justify-content: space-between;
+      gap: 12px; margin-bottom: 20px; padding: 10px 14px; border-radius: 12px;
+      background: var(--teal-dark); color: #fff;
+    }
+    .portal-toolbar a, .portal-toolbar button {
+      border: 1px solid rgba(255,255,255,.35); border-radius: 999px;
+      background: transparent; color: #fff; padding: 8px 12px; font: inherit;
+      font-weight: 800; text-decoration: none; cursor: pointer;
+    }
+    .portal-toolbar button { background: var(--teal); border-color: var(--teal); }
+    @media print {
+      .portal-toolbar { display: none !important; }
+      @page { size: A4; margin: 10mm; }
+      html { background: #fff; font-size: 9pt; line-height: 1.36; }
+      main { width: 100%; padding: 0; }
+      h1 { font-size: 25pt; }
+      h2 { font-size: 15pt; break-after: avoid-page; }
+      h3 { break-after: avoid-page; }
+      .topline { margin-bottom: 14px; }
+      .hero { grid-template-columns: 1.65fr 0.55fr; gap: 14px; }
+      .goal { padding: 11px; }
+      .route { grid-template-columns: repeat(5, 1fr); gap: 5px; margin: 14px 0 18px; }
+      .route div { min-height: 0; padding: 7px; }
+      section { margin-top: 16px; padding-top: 9px; }
+      section:nth-of-type(3), section:nth-of-type(6) { break-before: page; }
+      .routine { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+      .routine article, .mini-example, .passage, .question, .model, .bank, .plan-grid div { padding: 9px; }
+      .questions { gap: 6px; margin-top: 8px; }
+      .question { break-inside: avoid; }
+      .answer-row { grid-template-columns: 110px 1fr; gap: 7px; }
+      .proof-table th, .proof-table td { padding: 6px; height: 39px; }
+      .chain { grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 8px 0; }
+      .chain div { min-height: 0; padding: 7px; }
+      .notice { grid-template-columns: repeat(3, 1fr); gap: 5px; }
+      .notice div { min-height: 0; padding: 7px; }
+      .plan-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .independent { padding: 11px; }
+      .independent .write-lines { min-height: 190px; }
+      .bank-grid { grid-template-columns: 0.85fr 1.15fr; gap: 7px; }
+      .learning-table th, .learning-table td { padding: 6px; }
+      .checklist { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+      .goal, .route div, .routine article, .mini-example, .question, .chain div, .model, .notice div, .plan-grid div, .independent, .bank, .checklist div, .learning-table tr, .retrieval-box { break-inside: avoid; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      footer { margin-top: 14px; }
+    }
+  </style>
+  <style id="nelson-classroom-layout">
+    /*
+      Nelson's canonical classroom design.
+      Reading: printable classroom workbook; calm, direct, static.
+      DESIGN_VARIANCE: 3 | MOTION_INTENSITY: 1 | VISUAL_DENSITY: 6
+    */
+    :root {
+      --ink: #1f2933;
+      --muted: #52606d;
+      --paper: #eef1f4;
+      --surface: #ffffff;
+      --line: #cbd4dc;
+      --teal: #315f7d;
+      --teal-dark: #24475e;
+      --teal-soft: #edf3f7;
+      --gold: #315f7d;
+      --gold-soft: #f3f6f8;
+      --blue-soft: #edf3f7;
+      --radius: 5px;
+    }
+
+    html {
+      background: var(--paper);
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 15.5px;
+      line-height: 1.5;
+    }
+
+    body { padding: 24px 0; }
+
+    main {
+      width: min(920px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 38px 52px 52px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+
+    h1 {
+      max-width: 680px;
+      margin-bottom: 12px;
+      font-size: clamp(2.15rem, 5vw, 3.25rem);
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      font-weight: 750;
+    }
+
+    h2 {
+      margin-bottom: 7px;
+      font-size: 1.42rem;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+    }
+
+    h3 { font-size: 1rem; }
+    p { max-width: 72ch; }
+
+    .topline {
+      margin-bottom: 28px;
+      padding-bottom: 9px;
+      border-bottom: 1px solid var(--ink);
+      color: var(--ink);
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .hero {
+      grid-template-columns: minmax(0, 1.7fr) minmax(220px, 0.7fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .hero p {
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .goal {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 16px 18px;
+      border: 1px solid #b9cad6;
+      border-left: 4px solid var(--teal);
+      border-radius: var(--radius);
+      background: var(--teal-soft);
+      color: var(--ink);
+    }
+
+    .goal span { color: var(--muted); }
+    .goal strong { margin-top: 5px; color: var(--ink); font-size: 1.08rem; line-height: 1.35; }
+
+    .route {
+      margin: 26px 0 38px;
+      gap: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: #f7f9fa;
+    }
+
+    .route div {
+      min-height: 76px;
+      padding: 12px 11px;
+      border-right: 1px solid var(--line);
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .route div:last-child { border-right: 0; }
+    .route b { margin-bottom: 3px; color: var(--teal-dark); font-size: 0.96rem; }
+    .route span { color: var(--muted); font-size: 0.78rem; }
+
+    section {
+      margin-top: 38px;
+      padding-top: 18px;
+      border-top: 2px solid var(--ink);
+    }
+
+    .section-intro { margin-bottom: 15px; color: var(--muted); }
+
+    .prompt {
+      padding: 15px 17px;
+      border: 1px solid #c7d5df;
+      border-left: 4px solid var(--teal);
+      border-radius: var(--radius);
+      background: var(--teal-soft);
+    }
+
+    .write-lines {
+      min-height: 110px;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: repeating-linear-gradient(to bottom, #fff 0, #fff 29px, #d8dee3 30px);
+    }
+
+    .routine {
+      gap: 0;
+      border: 1px solid var(--line);
+    }
+
+    .routine article,
+    .routine article:nth-child(1),
+    .routine article:nth-child(2),
+    .routine article:nth-child(3) {
+      padding: 14px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      border-top: 4px solid var(--teal);
+      border-radius: 0;
+      background: #fff;
+    }
+
+    .routine article:last-child { border-right: 0; }
+    .routine strong { font-size: 1.02rem; }
+
+    .mini-example {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-left: 4px solid #8097a7;
+      border-radius: 0;
+      background: #f5f7f8;
+    }
+
+    .passage {
+      padding: 20px 22px;
+      border: 0;
+      border-left: 4px solid var(--teal);
+      border-radius: 0;
+      background: #f7f9fa;
+    }
+
+    .questions {
+      gap: 0;
+      margin-top: 16px;
+      border: 1px solid var(--line);
+    }
+
+    .question {
+      padding: 14px 16px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      border-radius: 0;
+      background: #fff;
+    }
+
+    .question:last-child { border-bottom: 0; }
+    .question b { color: var(--teal-dark); }
+    .answer-row { grid-template-columns: 145px 1fr; margin-top: 8px; }
+
+    .proof-table,
+    .learning-table {
+      border: 1px solid var(--line);
+      border-radius: 0;
+    }
+
+    .proof-table th,
+    .learning-table th {
+      padding: 10px;
+      background: #dfe9f0;
+      color: var(--ink);
+      border-right: 1px solid #c4d1da;
+    }
+
+    .proof-table th:last-child,
+    .learning-table th:last-child { border-right: 0; }
+
+    .proof-table td,
+    .learning-table td {
+      padding: 10px;
+      border-right: 1px solid #dbe1e6;
+    }
+
+    .proof-table td:last-child,
+    .learning-table td:last-child { border-right: 0; }
+
+    .learning-table td:first-child { color: var(--teal-dark); }
+
+    .chain {
+      gap: 0;
+      margin: 15px 0;
+      border: 1px solid var(--line);
+    }
+
+    .chain div {
+      min-height: 92px;
+      padding: 12px;
+      border-right: 1px solid var(--line);
+      border-radius: 0;
+      background: #f7f9fa;
+    }
+
+    .chain div:last-child { border-right: 0; }
+    .chain b { color: var(--teal-dark); }
+
+    .model {
+      padding: 18px 20px;
+      border: 1px solid #bfccd5;
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .notice {
+      gap: 0;
+      margin-top: 12px;
+      border: 1px solid var(--line);
+    }
+
+    .notice div {
+      min-height: 72px;
+      padding: 11px 12px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      border-radius: 0;
+      background: #f7f9fa;
+    }
+
+    .notice div:last-child { border-right: 0; }
+
+    .plan-grid { gap: 8px; }
+
+    .plan-grid div {
+      min-height: 84px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .plan-grid b { color: var(--teal-dark); }
+
+    .independent {
+      margin-top: 12px;
+      padding: 17px 18px;
+      border: 2px solid var(--teal-dark);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .independent p { color: var(--muted); }
+    .independent .write-lines { min-height: 240px; border-color: #aebbc5; }
+
+    .idea-bank { margin-top: 22px; }
+
+    .language-table td:first-child {
+      width: 31%;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .language-table td:nth-child(2) { width: 24%; }
+
+    .sentence-frames {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      background: #f7f9fa;
+    }
+
+    .sentence-frames ul { margin-bottom: 0; }
+
+    .idea-paths {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 12px;
+      border: 1px solid var(--line);
+    }
+
+    .idea-path {
+      min-width: 0;
+      padding: 15px;
+      border-right: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .idea-path:last-child { border-right: 0; }
+    .idea-path h4 { margin: 0 0 9px; color: var(--teal-dark); font-size: 0.98rem; }
+    .idea-path ul { margin: 0; padding-left: 19px; }
+    .idea-path li + li { margin-top: 7px; }
+
+    .retrieval-box {
+      margin-top: 16px;
+      padding: 15px 17px;
+      border: 1px solid #c7d5df;
+      border-left: 4px solid var(--teal);
+      border-radius: var(--radius);
+      background: var(--teal-soft);
+    }
+
+    .checklist {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+      margin-top: 16px;
+      border: 1px solid var(--line);
+    }
+
+    .checklist div {
+      padding: 10px 12px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      border-radius: 0;
+      background: #fff;
+    }
+
+    .checklist div:nth-child(2n) { border-right: 0; }
+    .checklist div:nth-last-child(-n+2) { border-bottom: 0; }
+
+    footer {
+      margin-top: 38px;
+      padding-top: 10px;
+      border-top: 1px solid var(--ink);
+      color: var(--muted);
+    }
+
+    @media (max-width: 760px) {
+      body { padding: 0; }
+      main { width: 100%; padding: 26px 20px 38px; border: 0; }
+      .topline, footer { display: block; }
+      .topline span, footer span { display: block; }
+      .topline span + span, footer span + span { margin-top: 4px; }
+      .hero { grid-template-columns: 1fr; }
+      .route { grid-template-columns: 1fr; }
+      .route div { min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
+      .route div:last-child { border-bottom: 0; }
+      .routine { grid-template-columns: 1fr; }
+      .routine article,
+      .routine article:nth-child(1),
+      .routine article:nth-child(2),
+      .routine article:nth-child(3) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .routine article:last-child { border-bottom: 0; }
+      .chain { grid-template-columns: 1fr; }
+      .chain div { min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
+      .chain div:last-child { border-bottom: 0; }
+      .notice { grid-template-columns: 1fr; }
+      .notice div { min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
+      .notice div:last-child { border-bottom: 0; }
+      .plan-grid, .checklist { grid-template-columns: 1fr; }
+      .idea-paths { grid-template-columns: 1fr; }
+      .idea-path { border-right: 0; border-bottom: 1px solid var(--line); }
+      .idea-path:last-child { border-bottom: 0; }
+      .checklist div, .checklist div:nth-child(2n), .checklist div:nth-last-child(-n+2) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .checklist div:last-child { border-bottom: 0; }
+      .learning-table { display: block; overflow-x: auto; }
+    }
+
+    @media print {
+      @page { size: A4; margin: 9mm; }
+      html { background: #fff; font-size: 8.8pt; line-height: 1.34; }
+      body { padding: 0; }
+      main { width: 100%; padding: 0; border: 0; }
+      h1 { font-size: 22pt; }
+      h2 { font-size: 13.5pt; }
+      .topline { margin-bottom: 12px; }
+      .hero { grid-template-columns: 1.7fr 0.7fr; gap: 12px; }
+      .goal { padding: 9px; }
+      .route { grid-template-columns: repeat(5, 1fr); margin: 12px 0 15px; }
+      .route div { min-height: 0; padding: 6px; border-right: 1px solid var(--line); border-bottom: 0; }
+      section { margin-top: 14px; padding-top: 7px; }
+      section:nth-of-type(3), section:nth-of-type(6) { break-before: page; }
+      .routine { grid-template-columns: repeat(3, 1fr); }
+      .routine article,
+      .routine article:nth-child(1),
+      .routine article:nth-child(2),
+      .routine article:nth-child(3) { padding: 7px; border-right: 1px solid var(--line); border-bottom: 0; }
+      .routine article:last-child { border-right: 0; }
+      .mini-example, .passage, .question, .model, .plan-grid div, .independent, .retrieval-box { padding: 8px; }
+      .questions { margin-top: 8px; }
+      .answer-row { grid-template-columns: 105px 1fr; gap: 6px; }
+      .proof-table th, .proof-table td, .learning-table th, .learning-table td { padding: 5px; }
+      .chain { grid-template-columns: repeat(4, 1fr); }
+      .chain div { min-height: 0; padding: 6px; border-right: 1px solid var(--line); border-bottom: 0; }
+      .chain div:last-child { border-right: 0; }
+      .notice { grid-template-columns: repeat(3, 1fr); }
+      .notice div { min-height: 0; padding: 6px; border-right: 1px solid var(--line); border-bottom: 0; }
+      .notice div:last-child { border-right: 0; }
+      .plan-grid { grid-template-columns: repeat(2, 1fr); gap: 5px; }
+      .idea-paths { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .idea-path { padding: 7px; border-right: 1px solid var(--line); border-bottom: 0; }
+      .idea-path:last-child { border-right: 0; }
+      .independent .write-lines { min-height: 180px; }
+      .checklist { grid-template-columns: repeat(2, 1fr); }
+      .goal, .routine article, .mini-example, .question, .chain div, .model, .notice div, .plan-grid div, .independent, .learning-table tr, .idea-path, .retrieval-box, .checklist div { break-inside: avoid; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      footer { margin-top: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="protected-page" hidden>
+    <nav class="portal-toolbar">
+      <a href="../index.html">Back to portal</a>
+      <button type="button" onclick="window.print()">Save as PDF</button>
+    </nav>
+    <div class="topline">
+      <span>Nelson · IELTS Trial Class</span>
+      <span>Reading + Writing · 60 minutes</span>
+    </div>
+
+    <header>
+      <div class="hero">
+        <div>
+          <h1>Make your proof visible.</h1>
+          <p>Good readers show why an answer is correct. Good writers show why an idea is convincing.</p>
+        </div>
+        <aside class="goal">
+          <span>Today I can…</span>
+          <strong>find exact reading evidence and build one clearly developed paragraph.</strong>
+        </aside>
+      </div>
+      <div class="route">
+        <div><b>1 · Think</b><span>Say what you already know.</span></div>
+        <div><b>2 · Read</b><span>Understand before choosing.</span></div>
+        <div><b>3 · Prove</b><span>Match statement and evidence.</span></div>
+        <div><b>4 · Build</b><span>Develop one clear idea.</span></div>
+        <div><b>5 · Improve</b><span>Check one target and redo.</span></div>
+      </div>
+    </header>
+
+    <section>
+      <h2>1. Start with your ideas</h2>
+      <p class="section-intro">Speak first. Then capture only your most useful ideas.</p>
+      <div class="prompt"><strong>Which helps you learn science better: reading an explanation, watching a demonstration, or doing an experiment yourself? Why?</strong></div>
+      <div class="write-lines"></div>
+    </section>
+
+    <section>
+      <h2>2. The reading decision</h2>
+      <p class="section-intro">For every statement, compare its meaning with the passage. Do not use outside knowledge.</p>
+      <div class="routine">
+        <article><strong>TRUE</strong>The passage says the same thing.</article>
+        <article><strong>FALSE</strong>The passage says the opposite.</article>
+        <article><strong>NOT GIVEN</strong>The passage does not answer the statement.</article>
+      </div>
+      <div class="mini-example">
+        <h3>Worked example</h3>
+        <p><strong>Text:</strong> The library closes at 6 p.m.</p>
+        <p><strong>A.</strong> The library is open after 7 p.m. → <strong>FALSE</strong> because <em>closes at 6</em> gives the opposite meaning.</p>
+        <p><strong>B.</strong> The library is busiest at 5 p.m. → <strong>NOT GIVEN</strong> because the text gives no information about how busy it is.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Reading: a life in science</h2>
+      <p class="section-intro">Read normally. Then answer one statement at a time and underline the shortest evidence that proves your choice.</p>
+      <article class="passage">
+        <h3>Marie Curie: research, discovery and teaching</h3>
+        <p>The marriage of Pierre and Marie Curie in 1895 began a scientific partnership that soon produced important results. After Henri Becquerel discovered a new phenomenon in 1896, Marie investigated whether radioactivity was present in elements other than uranium. She found that thorium had the same property.</p>
+        <p>Marie then studied pitchblende, a mineral that was more radioactive than pure uranium. This suggested that the mineral contained a small amount of an unknown, highly active substance. Pierre joined her research, and their work led to the discovery of two new elements: polonium and radium. Pierre mainly studied the new forms of radiation, while Marie worked to obtain pure radium. In 1903, Marie and Pierre shared the Nobel Prize for Physics with Becquerel.</p>
+        <p>The births of Marie’s daughters did not interrupt her scientific work. She also taught physics and introduced lessons based on experimental demonstrations. After Pierre died in 1906, Marie continued their work alone and became the first woman to teach at the Sorbonne. In 1911, she received the Nobel Prize for Chemistry for isolating pure radium.</p>
+      </article>
+
+      <div class="questions">
+        <div class="question"><b>1.</b> Pierre and Marie began working together before they married.<div class="answer-row"><span>TRUE / FALSE / NOT GIVEN:</span><span class="blank"></span></div><div class="answer-row"><span>Exact evidence:</span><span class="blank"></span></div></div>
+        <div class="question"><b>2.</b> Marie investigated whether elements besides uranium were radioactive.<div class="answer-row"><span>TRUE / FALSE / NOT GIVEN:</span><span class="blank"></span></div><div class="answer-row"><span>Exact evidence:</span><span class="blank"></span></div></div>
+        <div class="question"><b>3.</b> Pierre chose the name “polonium” for one of the new elements.<div class="answer-row"><span>TRUE / FALSE / NOT GIVEN:</span><span class="blank"></span></div><div class="answer-row"><span>Exact evidence:</span><span class="blank"></span></div></div>
+        <div class="question"><b>4.</b> Research into pitchblende contributed to the discovery of polonium and radium.<div class="answer-row"><span>TRUE / FALSE / NOT GIVEN:</span><span class="blank"></span></div><div class="answer-row"><span>Exact evidence:</span><span class="blank"></span></div></div>
+        <div class="question"><b>5.</b> Marie stopped doing scientific work after her daughters were born.<div class="answer-row"><span>TRUE / FALSE / NOT GIVEN:</span><span class="blank"></span></div><div class="answer-row"><span>Exact evidence:</span><span class="blank"></span></div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Make the paraphrase visible</h2>
+      <p class="section-intro">Record meaning relationships, not isolated synonyms.</p>
+      <table class="proof-table">
+        <thead><tr><th>Question words</th><th>Passage words</th><th>Relationship</th></tr></thead>
+        <tbody>
+          <tr><td></td><td></td><td>same / opposite / missing</td></tr>
+          <tr><td></td><td></td><td>same / opposite / missing</td></tr>
+          <tr><td></td><td></td><td>same / opposite / missing</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>5. From a spoken idea to a developed paragraph</h2>
+      <div class="prompt"><strong>Writing focus:</strong> Schools should use more practical experiments instead of relying mainly on textbooks. Do you agree or disagree?</div>
+      <div class="chain">
+        <div><b>POINT</b>Give your clear answer or main idea.</div>
+        <div><b>WHY</b>Explain why the idea is reasonable.</div>
+        <div><b>EXAMPLE</b>Make the explanation concrete.</div>
+        <div><b>RESULT</b>Show the effect and link back.</div>
+      </div>
+      <article class="model">
+        <h3>Model on a different topic</h3>
+        <p><strong>Students should study in groups more often.</strong> I agree because group work allows learners to explain difficult ideas to one another. <strong>For example,</strong> when students solve a maths problem together, one person may show a method that the others have not considered. <strong>As a result,</strong> everyone can understand the problem more deeply and become more confident. Therefore, regular group study can support learning when each student participates actively.</p>
+      </article>
+      <div class="notice">
+        <div><strong>Notice 1</strong><br>Underline the writer’s clear position.</div>
+        <div><strong>Notice 2</strong><br>Number the POINT, WHY, EXAMPLE and RESULT.</div>
+        <div><strong>Notice 3</strong><br>Mark where the writer moves from reason to evidence and from evidence to result.</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>6. Plan, cover, write</h2>
+      <p class="section-intro">Plan in keywords. Then cover the model and write from your own plan.</p>
+      <div class="plan-grid">
+        <div><b>POINT</b><br>My position: ______________________________</div>
+        <div><b>WHY</b><br>Main reason: ______________________________</div>
+        <div><b>EXAMPLE</b><br>A specific lesson or experiment: ____________</div>
+        <div><b>RESULT</b><br>What students gain: ________________________</div>
+      </div>
+      <div class="independent">
+        <h3>Independent paragraph · 90-120 words</h3>
+        <p>Use your plan. Do not copy the model. Make every sentence do a clear job.</p>
+        <div class="write-lines"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>7. Build an IELTS-ready language and idea bank</h2>
+      <p class="section-intro">Learn useful words as complete chunks. Choose one idea route, cover the bank and rebuild it in your own words.</p>
+      <h3>Language bank: memorise these whole phrases</h3>
+      <table class="learning-table language-table">
+        <thead><tr><th>High-value chunk</th><th>Meaning and use</th><th>Natural IELTS example</th></tr></thead>
+        <tbody>
+          <tr><td>rely mainly on textbook-based instruction</td><td>teach mostly from books</td><td>Science lessons should not rely mainly on textbook-based instruction.</td></tr>
+          <tr><td>provide a sound theoretical foundation</td><td>give the essential knowledge first</td><td>Textbooks provide a sound theoretical foundation for laboratory work.</td></tr>
+          <tr><td>put scientific principles into practice</td><td>apply theory in a real task</td><td>Experiments allow learners to put scientific principles into practice.</td></tr>
+          <tr><td>carry out a controlled experiment</td><td>perform a careful test; not <em>make an experiment</em></td><td>Students can carry out a controlled experiment and compare the results.</td></tr>
+          <tr><td>formulate a hypothesis</td><td>state a prediction that can be tested</td><td>Learners formulate a hypothesis before changing one variable.</td></tr>
+          <tr><td>record and interpret the results</td><td>collect evidence and explain its meaning</td><td>They must record and interpret the results rather than simply watch.</td></tr>
+          <tr><td>develop practical and analytical skills</td><td>learn how to do and how to reason</td><td>Laboratory work develops practical and analytical skills.</td></tr>
+          <tr><td>retain knowledge more effectively</td><td>remember learning for longer</td><td>Students may retain knowledge more effectively when they apply it.</td></tr>
+          <tr><td>be constrained by time, equipment and safety considerations</td><td>face realistic limits</td><td>School experiments are often constrained by time, equipment and safety considerations.</td></tr>
+          <tr><td>supplement theory with hands-on practical work</td><td>add practice without abandoning books</td><td>Schools should supplement theory with hands-on practical work.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sentence-frames">
+        <h3>Three flexible patterns</h3>
+        <ul>
+          <li><strong>By carrying out...</strong>, students can...</li>
+          <li>This allows learners to..., <strong>which in turn</strong>...</li>
+          <li><strong>Although</strong> textbooks provide..., practical work allows...</li>
+        </ul>
+      </div>
+
+      <div class="idea-bank">
+        <h3>Idea bank: choose one route</h3>
+        <p>Do not use every idea. Select one route and turn its connected statements into one developed paragraph.</p>
+        <div class="idea-paths">
+          <article class="idea-path">
+            <h4>Route A: deeper understanding</h4>
+            <ul>
+              <li>Scientific explanations in textbooks can be abstract.</li>
+              <li>Experiments allow students to observe a principle in action.</li>
+              <li>Learners can compare a prediction with an actual result.</li>
+              <li>This connects theory with evidence and improves retention.</li>
+              <li>Example: compare how efficiently different materials conduct heat.</li>
+            </ul>
+          </article>
+          <article class="idea-path">
+            <h4>Route B: scientific thinking</h4>
+            <ul>
+              <li>Science involves testing claims, not merely memorising facts.</li>
+              <li>Students formulate a hypothesis and control the variables.</li>
+              <li>They record, compare and interpret the results.</li>
+              <li>An unexpected result encourages them to revise their explanation.</li>
+              <li>This develops practical and analytical skills.</li>
+            </ul>
+          </article>
+          <article class="idea-path">
+            <h4>Route C: a balanced approach</h4>
+            <ul>
+              <li>Practical lessons require equipment, time and safe supervision.</li>
+              <li>Some experiments are too costly or hazardous for individual students.</li>
+              <li>Textbooks efficiently provide background knowledge and instructions.</li>
+              <li>Teachers can use demonstrations or simulations when necessary.</li>
+              <li>Schools should supplement theory with regular practical work, not abandon books.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+
+      <div class="retrieval-box">
+        <h3>Memory challenge</h3>
+        <ol>
+          <li>Choose six language chunks and one idea route.</li>
+          <li>Cover this section and recall the six chunks aloud.</li>
+          <li>Rebuild the idea route in four connected sentences without copying.</li>
+          <li>Rewrite your paragraph using at least three chunks accurately.</li>
+        </ol>
+      </div>
+      <div class="checklist">
+        <div>□ My position is clear.</div>
+        <div>□ I explain one main reason.</div>
+        <div>□ My example is specific.</div>
+        <div>□ My result links to the point.</div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Class Notes · Reading to Writing</span>
+      <span>Read for meaning. Write with proof.</span>
+    </footer>
+  </main>
+</body>
+</html>

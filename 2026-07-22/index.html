@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Class 2 · Change and Consequences</title>
+  <link rel="stylesheet" href="../assets/site.css">
+  <script src="../assets/portal-data.js" defer></script>
+  <script src="../assets/access-gate.js" defer></script>
+</head>
+<body>
+  <main class="class-page protected-page" hidden>
+    <nav class="class-toolbar">
+      <a href="../index.html">Back to portal</a>
+      <button type="button" onclick="window.print()">Save class page as PDF</button>
+    </nav>
+    <section class="class-hero">
+      <p class="eyebrow">Class 2 · 22 July 2026</p>
+      <h1>Change and Consequences — Takeaway 1</h1>
+      <p>The submitted writing was corrected first. Exercise 1 was completed in class, and three later practices were assigned.</p>
+    </section>
+    <section class="class-card">
+      <h2>Class files</h2>
+      <div class="file-grid">
+        <article class="file-card">
+          <p class="eyebrow">Learning handout</p>
+          <h2>Takeaway 1</h2>
+          <p>Trend shapes, strength, grammar changes, and compact noun phrases.</p>
+          <a href="files/Nelson_Change_and_Consequences_Takeaway_1.pdf" target="_blank">Open PDF</a>
+        </article>
+        <article class="file-card">
+          <p class="eyebrow">Checked writing</p>
+          <h2>Revised essay</h2>
+          <p>The corrected practical-activities response reviewed in class.</p>
+          <a href="files/Nelson_Revised_Essay_Practical_Activities.pdf" target="_blank">Open PDF</a>
+        </article>
+      </div>
+    </section>
+    <section class="class-card">
+      <h2>Assigned practice</h2>
+      <ol>
+        <li>Notice the strength.</li>
+        <li>Change the grammar, keep the meaning.</li>
+        <li>Exercise 2 — Make the noun phrase compact.</li>
+      </ol>
+    </section>
+    <section id="class-review-card" class="class-card" hidden>
+      <p class="eyebrow">Review</p>
+      <h2>Class review</h2>
+      <p id="class-review-copy" class="review-copy"></p>
+    </section>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var resource = window.NELSON_PORTAL_DATA.resources.find(function (item) {
+        return item.id === "class-2-change-takeaway-1";
+      });
+      if (resource && resource.reviewVisible && resource.review.trim()) {
+        document.querySelector("#class-review-copy").textContent = resource.review;
+        document.querySelector("#class-review-card").hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>
