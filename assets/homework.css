@@ -260,6 +260,25 @@
   display: none;
 }
 
+.compact-question-list {
+  gap: 8px;
+}
+
+.compact-question-list .homework-question {
+  padding: 12px 14px;
+}
+
+.compact-question-list .homework-question label {
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 48%);
+  align-items: center;
+  gap: 14px;
+}
+
+.compact-question-list select[data-choice-layout="compact"] {
+  min-width: 0;
+  margin: 0;
+}
+
 .homework-status {
   position: sticky;
   bottom: 12px;
@@ -324,6 +343,9 @@
     box-shadow: none;
   }
   .homework-brief {
+    grid-template-columns: 1fr;
+  }
+  .compact-question-list .homework-question label {
     grid-template-columns: 1fr;
   }
   .homework-status {

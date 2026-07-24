@@ -296,6 +296,7 @@
 
   function enhanceChoiceControls() {
     document.querySelectorAll("select[data-response-id]").forEach((select) => {
+      if (select.dataset.choiceLayout === "compact") return;
       const question = select.closest(".homework-question");
       if (!question) return;
 
