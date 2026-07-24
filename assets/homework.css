@@ -123,29 +123,6 @@
 .source-box {
   background: var(--green-soft);
 }
-.source-panel {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 22px;
-  align-items: center;
-  margin: 18px 0 12px;
-  padding: 18px 20px;
-  border: 1px solid #c8d8ce;
-  border-radius: 14px;
-  background: var(--green-soft);
-}
-.source-panel p { margin: 6px 0 0; color: var(--muted); line-height: 1.55; }
-.source-actions { display: grid; gap: 8px; min-width: 185px; }
-.source-actions a {
-  border-radius: 999px;
-  background: var(--green);
-  color: #fff;
-  padding: 9px 13px;
-  font-size: .82rem;
-  font-weight: 800;
-  text-align: center;
-  text-decoration: none;
-}
 .reading-unit { scroll-margin-top: 22px; }
 
 .source-box a {
@@ -299,11 +276,9 @@
     border-radius: 0;
     box-shadow: none;
   }
-  .homework-brief,
-  .source-panel {
+  .homework-brief {
     grid-template-columns: 1fr;
   }
-  .source-actions { min-width: 0; }
   .homework-status {
     margin: 12px;
   }
