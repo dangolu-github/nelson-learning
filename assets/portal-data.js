@@ -83,13 +83,13 @@ window.NELSON_PORTAL_DATA = {
       id: "class-3-change-continuation",
       eyebrow: "Class 3",
       date: "24 July 2026",
-      title: "Change and Consequences — Read the Cafe Graph",
+      title: "Change and Consequences — Read the Axes and Trace the Lines",
       skills: ["Writing", "Speaking", "Reading", "Grammar"],
       summary:
-        "Review the previous homework answers, read the cafe graph accurately, and prepare to move from visual evidence to clear spoken and written comparisons.",
+        "Review the previous homework answers, identify each cafe line, trace it to the requested month, and read an approximate value from the vertical scale.",
       guidance:
-        "Completed together: the previous homework answer review and Section 3, Read the Cafe Graph. Continue next time from Section 4, Notice, Say, and Build. Later sections remain available for continuity but are not recorded as completed.",
-      evidence: "Homework answers reviewed · Cafe Graph section completed",
+        "Completed together: the previous homework answer review and Questions A–F under Read the axes and trace the lines. Continue next time from Section 4, Notice, Say, and Build. Later sections remain available for continuity but are not recorded as completed.",
+      evidence: "Homework answers reviewed · axes-and-lines Questions A–F taught",
       listed: true,
       released: true,
       guidanceVisible: true,

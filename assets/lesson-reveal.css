@@ -1,0 +1,52 @@
+.lesson-reveal-status {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 16px;
+  border: 1px solid #c9d4cf;
+  border-radius: 999px;
+  padding: 7px 11px;
+  background: #f5f7f6;
+  color: #52606d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.lesson-reveal-status.is-available {
+  border-color: #8fc0a7;
+  background: #e8f5ed;
+  color: #24613f;
+}
+
+.lesson-reveal {
+  margin: 10px 0 16px;
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.lesson-reveal.answer {
+  border: 1px solid #a8cfb8;
+  background: #eef8f1;
+}
+
+.lesson-reveal.explanation {
+  border: 1px solid #cdbce5;
+  background: #f5f0fb;
+}
+
+.lesson-reveal summary {
+  padding: 10px 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lesson-reveal p {
+  margin: 0;
+  padding: 0 13px 13px;
+}
+
+@media print {
+  .lesson-reveal-status,
+  .lesson-reveal:not([open]) {
+    display: none;
+  }
+}
