@@ -213,6 +213,53 @@
   line-height: 1.65;
 }
 
+.choice-group {
+  display: grid;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.choice-card {
+  width: 100%;
+  border: 1px solid #c5cec9;
+  border-radius: 11px;
+  background: #fffdf8;
+  padding: 12px 14px;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 650;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+
+.choice-card:hover {
+  border-color: var(--green);
+  background: var(--green-soft);
+}
+
+.choice-card:focus-visible {
+  outline: 3px solid rgba(18, 104, 82, .24);
+  outline-offset: 2px;
+}
+
+.choice-card.is-selected {
+  border-color: var(--green);
+  background: var(--green-soft);
+  box-shadow: inset 4px 0 0 var(--green);
+}
+
+.choice-card:disabled {
+  cursor: not-allowed;
+  opacity: .68;
+}
+
+.choice-select-fallback[hidden],
+.choice-copy[hidden] {
+  display: none;
+}
+
 .homework-status {
   position: sticky;
   bottom: 12px;

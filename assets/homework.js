@@ -5,11 +5,13 @@
   const portal = window.NELSON_PORTAL_CONFIG;
   if (!page || !portal?.serviceEndpoint) return;
 
+  enhanceChoiceControls();
   const fields = Array.from(document.querySelectorAll("[data-response-id]"));
   if (!fields.length) return;
 
   const storageKey = `nelson-homework:${page.assignmentId}`;
   let state = loadState();
+  pruneRemovedResponses();
   let localTimer;
   let remoteTimer;
   let submitted = Boolean(state.submittedAt);
@@ -49,19 +51,29 @@
     fields.forEach((field) => {
       field.addEventListener(field.tagName === "SELECT" ? "change" : "input", capture);
       field.disabled = submitted;
+      syncChoiceControl(field);
     });
   }
 
   function capture(event) {
     state.responses[event.target.dataset.responseId] = event.target.value.trim();
     state.clientUpdatedAt = new Date().toISOString();
+    syncChoiceControl(event.target);
     updateStatus();
     scheduleLocalSave();
+  }
+
+  function pruneRemovedResponses() {
+    const activeIds = new Set(fields.map((field) => field.dataset.responseId));
+    Object.keys(state.responses || {}).forEach((responseId) => {
+      if (!activeIds.has(responseId)) delete state.responses[responseId];
+    });
   }
 
   function restoreFields() {
     fields.forEach((field) => {
       field.value = state.responses[field.dataset.responseId] || "";
+      syncChoiceControl(field);
     });
   }
 
@@ -235,6 +247,7 @@
   function lockPage(message) {
     fields.forEach((field) => {
       field.disabled = true;
+      syncChoiceControl(field);
     });
     const button = document.querySelector("#homework-submit");
     button.disabled = true;
@@ -255,6 +268,7 @@
     state = freshState();
     fields.forEach((field) => {
       field.value = "";
+      syncChoiceControl(field);
     });
     localStorage.setItem(storageKey, JSON.stringify(state));
     updateStatus();
@@ -278,6 +292,56 @@
 
   function accessToken() {
     return window.NelsonPortalAccess?.getToken() || "";
+  }
+
+  function enhanceChoiceControls() {
+    document.querySelectorAll("select[data-response-id]").forEach((select) => {
+      const question = select.closest(".homework-question");
+      if (!question) return;
+
+      const copy = select.parentElement.querySelector(".choice-copy");
+      const writtenChoices = copy
+        ? copy.textContent.split(/\s+·\s+/).map((item) => item.trim())
+        : [];
+      const group = document.createElement("div");
+      group.className = "choice-group";
+      group.setAttribute("role", "radiogroup");
+      group.setAttribute("aria-label", "Choose one answer");
+
+      Array.from(select.options).slice(1).forEach((option, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "choice-card";
+        button.dataset.choiceValue = option.value;
+        button.setAttribute("role", "radio");
+        button.setAttribute("aria-checked", "false");
+        button.textContent =
+          writtenChoices[index] || `${option.value}. ${option.textContent.trim()}`;
+        button.addEventListener("click", () => {
+          if (select.disabled) return;
+          select.value = option.value;
+          select.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        group.append(button);
+      });
+
+      select.hidden = true;
+      select.classList.add("choice-select-fallback");
+      if (copy) copy.hidden = true;
+      select._choiceGroup = group;
+      question.append(group);
+      syncChoiceControl(select);
+    });
+  }
+
+  function syncChoiceControl(field) {
+    if (field.tagName !== "SELECT" || !field._choiceGroup) return;
+    field._choiceGroup.querySelectorAll(".choice-card").forEach((button) => {
+      const selected = button.dataset.choiceValue === field.value;
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-checked", String(selected));
+      button.disabled = field.disabled;
+    });
   }
 
   async function post(payload) {
