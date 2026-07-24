@@ -78,7 +78,7 @@ window.NELSON_PORTAL_DATA = {
       skills: ["Writing", "Speaking", "Reading", "Grammar"],
       summary: "Read the axes and trace the cafe lines.",
       guidance:
-        "Completed together: the previous homework answer review and Questions A–F under Read the axes and trace the lines. Continue next time from Section 4, Notice, Say, and Build. Later sections remain available for continuity but are not recorded as completed.",
+        "Completed together: the previous homework answer review and Questions A–F under Read the axes and trace the lines.",
       evidence: "Homework answers reviewed · axes-and-lines Questions A–F taught",
       listed: true,
       released: true,

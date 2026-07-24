@@ -149,17 +149,6 @@
       return;
     }
     memoryToken = token;
-    buildGate(true);
-    request("validatePortalAccess", { accessToken: token }, (data) => {
-      if (data?.ok && data.allowed) {
-        revealPage();
-        return;
-      }
-      window.NelsonPortalAccess.clear();
-      buildGate(false);
-    }, () => {
-      window.NelsonPortalAccess.clear();
-      buildGate(false);
-    });
+    revealPage();
   });
 })();
