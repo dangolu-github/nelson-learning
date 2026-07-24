@@ -159,27 +159,39 @@
   text-decoration: none;
 }
 
-.source-reader {
+.reading-passage {
   margin: 14px 0 24px;
+  padding: clamp(20px, 4vw, 34px);
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: #fff;
-  overflow: hidden;
+  background: #fffdf8;
 }
 
-.source-reader summary {
-  padding: 14px 18px;
-  background: #f6f8f6;
+.reading-passage .passage-label {
+  margin: 0 0 4px;
+  color: var(--accent);
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.reading-passage h3 {
+  margin: 0 0 18px;
   color: var(--green);
-  font-weight: 800;
-  cursor: pointer;
+  font-size: clamp(1.55rem, 4vw, 2.2rem);
 }
 
-.source-reader object {
-  display: block;
-  width: 100%;
-  height: min(78vh, 760px);
-  border: 0;
+.reading-passage h4 {
+  margin: 24px 0 8px;
+  color: var(--ink);
+  font-size: 1.02rem;
+}
+
+.reading-passage p {
+  max-width: 74ch;
+  margin: 0 0 14px;
+  line-height: 1.75;
 }
 
 .homework-grid {
