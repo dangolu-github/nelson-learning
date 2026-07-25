@@ -37,6 +37,7 @@
       startedAt: new Date().toISOString(),
       clientUpdatedAt: "",
       responses: {},
+      remoteStarted: false,
       submittedAt: "",
     };
   }
@@ -126,14 +127,14 @@
   }
 
   function scheduleRemoteSave() {
-    if (submitted || answeredCount() === 0) return;
+    if (!shouldSyncProgress()) return;
     window.clearTimeout(remoteTimer);
     window.clearTimeout(remoteRetryTimer);
     remoteTimer = window.setTimeout(saveRemote, 850);
   }
 
   async function saveRemote() {
-    if (submitted || answeredCount() === 0) return;
+    if (!shouldSyncProgress()) return;
     try {
       await post({
         action: "saveHomeworkProgress",
@@ -157,6 +158,12 @@
       (data) => {
         if (data?.ok && !data.pending && data.clientUpdatedAt === state.clientUpdatedAt) {
           window.clearTimeout(remoteRetryTimer);
+          state.remoteStarted = true;
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(state));
+          } catch {
+            // The confirmed remote draft remains available to the teacher.
+          }
           return;
         }
         if (attempt < 4) {
@@ -173,9 +180,13 @@
   }
 
   function scheduleRemoteRetry() {
-    if (submitted || answeredCount() === 0) return;
+    if (!shouldSyncProgress()) return;
     window.clearTimeout(remoteRetryTimer);
     remoteRetryTimer = window.setTimeout(saveRemote, 5000);
+  }
+
+  function shouldSyncProgress() {
+    return !submitted && (answeredCount() > 0 || state.remoteStarted === true);
   }
 
   function checkAssignment() {
