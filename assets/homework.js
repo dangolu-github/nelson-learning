@@ -14,6 +14,7 @@
   pruneRemovedResponses();
   let localTimer;
   let remoteTimer;
+  let remoteRetryTimer;
   let submitted = Boolean(state.submittedAt);
 
   installStatus();
@@ -116,7 +117,7 @@
     localTimer = window.setTimeout(() => {
       try {
         localStorage.setItem(storageKey, JSON.stringify(state));
-        setSaveText("Saved on this device · syncing with Teacher…");
+        setSaveText("Draft saved");
         scheduleRemoteSave();
       } catch {
         setSaveText("This browser could not save the draft");
@@ -127,6 +128,7 @@
   function scheduleRemoteSave() {
     if (submitted || answeredCount() === 0) return;
     window.clearTimeout(remoteTimer);
+    window.clearTimeout(remoteRetryTimer);
     remoteTimer = window.setTimeout(saveRemote, 850);
   }
 
@@ -144,7 +146,7 @@
       });
       verifyProgress(0);
     } catch {
-      setSaveText("Saved on this device · online sync will retry");
+      scheduleRemoteRetry();
     }
   }
 
@@ -154,20 +156,26 @@
       { saveId: state.saveId, assignmentId: page.assignmentId },
       (data) => {
         if (data?.ok && !data.pending && data.clientUpdatedAt === state.clientUpdatedAt) {
-          setSaveText("Saved on this device and with Teacher");
+          window.clearTimeout(remoteRetryTimer);
           return;
         }
         if (attempt < 4) {
           window.setTimeout(() => verifyProgress(attempt + 1), 850 + attempt * 450);
         } else {
-          setSaveText("Saved on this device · online sync pending");
+          scheduleRemoteRetry();
         }
       },
       () => {
         if (attempt < 4) window.setTimeout(() => verifyProgress(attempt + 1), 1200);
-        else setSaveText("Saved on this device · online sync pending");
+        else scheduleRemoteRetry();
       },
     );
+  }
+
+  function scheduleRemoteRetry() {
+    if (submitted || answeredCount() === 0) return;
+    window.clearTimeout(remoteRetryTimer);
+    remoteRetryTimer = window.setTimeout(saveRemote, 5000);
   }
 
   function checkAssignment() {
@@ -183,7 +191,7 @@
         }
         if (submitted) checkTeacherReview();
       },
-      () => setSaveText("Saved locally · assignment status unavailable"),
+      () => {},
     );
   }
 
@@ -229,6 +237,8 @@
       (data) => {
         if (data?.ok && !data.pending) {
           submitted = true;
+          window.clearTimeout(remoteTimer);
+          window.clearTimeout(remoteRetryTimer);
           state.submittedAt = data.submittedAt || submittedAt;
           try {
             localStorage.setItem(storageKey, JSON.stringify(state));
