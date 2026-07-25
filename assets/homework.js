@@ -371,13 +371,17 @@
 
       Array.from(select.options).slice(1).forEach((option, index) => {
         const button = document.createElement("button");
+        const optionLabel = option.textContent.trim();
         button.type = "button";
         button.className = "choice-card";
         button.dataset.choiceValue = option.value;
         button.setAttribute("role", "radio");
         button.setAttribute("aria-checked", "false");
         button.textContent =
-          writtenChoices[index] || `${option.value}. ${option.textContent.trim()}`;
+          writtenChoices[index] ||
+          (/^[A-Z0-9]+\s*[—–-]\s+/i.test(optionLabel)
+            ? optionLabel
+            : `${option.value}. ${optionLabel}`);
         button.addEventListener("click", () => {
           if (select.disabled) return;
           select.value = option.value;
