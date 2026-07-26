@@ -402,7 +402,9 @@
           writtenChoices[index] ||
           (/^[A-Z0-9]+\s*[—–-]\s+/i.test(optionLabel)
             ? optionLabel
-            : `${option.value}. ${optionLabel}`);
+            : option.value === optionLabel
+              ? optionLabel
+              : `${option.value}. ${optionLabel}`);
         button.addEventListener("click", () => {
           if (select.disabled) return;
           select.value = option.value;

@@ -200,6 +200,7 @@
   padding: 11px 12px;
   color: var(--ink);
   font: inherit;
+  font-weight: 400;
 }
 
 .homework-question textarea {
@@ -227,7 +228,7 @@
   padding: 12px 14px;
   color: var(--ink);
   font: inherit;
-  font-weight: 650;
+  font-weight: 400;
   line-height: 1.45;
   text-align: left;
   cursor: pointer;
@@ -277,6 +278,19 @@
 .compact-question-list select[data-choice-layout="compact"] {
   min-width: 0;
   margin: 0;
+}
+
+.report-passage {
+  margin-bottom: 12px;
+  line-height: 1.75;
+}
+
+.report-answer-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.report-answer-grid .homework-question:last-child {
+  grid-column: 1 / -1;
 }
 
 .homework-status {
@@ -371,6 +385,7 @@
 
 .teacher-review-content p {
   margin: 0;
+  font-weight: 400;
   white-space: pre-wrap;
 }
 
@@ -400,6 +415,12 @@
   }
   .compact-question-list .homework-question label {
     grid-template-columns: 1fr;
+  }
+  .report-answer-grid {
+    grid-template-columns: 1fr;
+  }
+  .report-answer-grid .homework-question:last-child {
+    grid-column: auto;
   }
   .homework-status {
     margin: 12px;
