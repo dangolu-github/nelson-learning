@@ -6,7 +6,7 @@ IELTS-standard B1-B2 English course.
 - Student routes contain released student materials only.
 - HTML learning materials open as native, responsive portal pages rather than
   embedded PDFs.
-- Skill Boosters group reusable Writing, Reading, Speaking, and Grammar work.
+- Skill Boosters currently contain only the explicitly approved Grammar book.
 - Interactive homework saves on the learner's device and synchronizes progress
   and final submissions to a private Google workbook.
 - `/teacher/` mirrors public release state and provides links into

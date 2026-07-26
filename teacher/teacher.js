@@ -4,6 +4,7 @@
   const data = window.NELSON_PORTAL_DATA;
   const config = window.NELSON_TEACHER_PORTAL;
   const draftKey = "nelsonTeacherReleaseDraftV2";
+  const sectionStatePrefix = "nelsonTeacherSectionV1:";
   const viewerDeviceKey = "nelsonPortalViewerDeviceV1";
   const roleKey = "nelsonPortalDeviceRoleV1";
   let presenceToken = "";
@@ -100,22 +101,36 @@
   function resourceCard(resource) {
     const state = resolvedState(resource);
     const changed = statesDiffer(resource, state);
-    const card = document.createElement("article");
+    const card = document.createElement("details");
     card.className = `release-card${changed ? " draft-change" : ""}`;
     card.dataset.resourceId = resource.id;
+    card.dataset.sectionKey = `class-${resource.id}`;
+    card.open = true;
 
-    const heading = document.createElement("div");
+    const heading = document.createElement("summary");
     heading.className = "release-card-heading";
-    const titleBlock = document.createElement("div");
-    addText(titleBlock, "p", "eyebrow", `${resource.date} · ${resource.eyebrow}`);
-    addText(titleBlock, "h3", "", resource.title);
-    const sync = addText(
-      heading,
+    const titleBlock = document.createElement("span");
+    addText(titleBlock, "span", "eyebrow", `${resource.date} · ${resource.eyebrow}`);
+    addText(titleBlock, "span", "release-card-title", resource.title);
+    const statusChips = document.createElement("span");
+    statusChips.className = "release-status-chips";
+    addText(
+      statusChips,
       "span",
       `sync-chip ${changed ? "pending" : "live"}`,
       changed ? "Draft change" : "Matches live",
     );
-    heading.append(titleBlock, sync);
+    addText(
+      statusChips,
+      "span",
+      `sync-chip ${state.released ? "live" : "locked"}`,
+      state.released ? "Released" : "Locked",
+    );
+    addText(statusChips, "span", "card-toggle-label", "");
+    heading.append(titleBlock, statusChips);
+
+    const body = document.createElement("div");
+    body.className = "release-card-body";
 
     const controls = document.createElement("div");
     controls.className = "control-grid";
@@ -173,24 +188,34 @@
     footer.className = "release-card-footer";
     addText(footer, "p", "evidence-copy", resource.evidence);
 
-    card.append(heading, controls, materials, footer);
+    body.append(controls, materials, footer);
+    card.append(heading, body);
     return card;
   }
 
   function renderBoards() {
-    const activeBoard = document.querySelector("#active-release-board");
+    const releasedBoard = document.querySelector("#released-release-board");
+    const lockedBoard = document.querySelector("#locked-release-board");
     const archiveBoard = document.querySelector("#archive-release-board");
-    activeBoard.replaceChildren();
+    releasedBoard.replaceChildren();
+    lockedBoard.replaceChildren();
     archiveBoard.replaceChildren();
 
     data.resources.forEach((resource) => {
       const state = resolvedState(resource);
-      const destination = state.archived ? archiveBoard : activeBoard;
+      const destination = state.archived
+        ? archiveBoard
+        : state.released
+          ? releasedBoard
+          : lockedBoard;
       destination.append(resourceCard(resource));
     });
 
-    if (!activeBoard.children.length) {
-      addText(activeBoard, "p", "empty-state", "No active class dates.");
+    if (!releasedBoard.children.length) {
+      addText(releasedBoard, "p", "empty-state", "No class date is currently released.");
+    }
+    if (!lockedBoard.children.length) {
+      addText(lockedBoard, "p", "empty-state", "No future or locked class date.");
     }
     if (!archiveBoard.children.length) {
       addText(
@@ -200,6 +225,90 @@
         "Archived class dates will appear here with their original subsections.",
       );
     }
+    document.querySelector("#released-board-count").textContent =
+      String(releasedBoard.querySelectorAll(".release-card").length);
+    document.querySelector("#locked-board-count").textContent =
+      String(lockedBoard.querySelectorAll(".release-card").length);
+    renderOverview();
+    restoreSectionStates(document);
+  }
+
+  function renderOverview() {
+    const states = data.resources.map((resource) => ({
+      state: resolvedState(resource),
+      changed: statesDiffer(resource, resolvedState(resource)),
+    }));
+    document.querySelector("#released-class-count").textContent = String(
+      states.filter((item) => !item.state.archived && item.state.released).length,
+    );
+    document.querySelector("#locked-class-count").textContent = String(
+      states.filter((item) => !item.state.archived && !item.state.released).length,
+    );
+    document.querySelector("#draft-change-count").textContent = String(
+      states.filter((item) => item.changed).length,
+    );
+    document.querySelector("#booster-count").textContent = String(
+      (config.boosters || []).length,
+    );
+  }
+
+  function renderBoosters() {
+    const board = document.querySelector("#booster-board");
+    board.replaceChildren();
+    (config.boosters || []).forEach((booster) => {
+      const card = document.createElement("article");
+      card.className = "booster-card";
+      const copy = document.createElement("div");
+      addText(copy, "p", "eyebrow", booster.status);
+      addText(copy, "h3", "", booster.title);
+      addText(copy, "p", "booster-note", booster.note);
+      const actions = document.createElement("div");
+      actions.className = "material-actions";
+      [
+        {
+          label: "Open student booster",
+          href: new URL(booster.studentRoute, config.studentSite).href,
+        },
+        { label: "Open private course book", href: booster.teacherHref },
+      ].forEach((item) => {
+        if (!item.href) return;
+        const link = document.createElement("a");
+        link.href = item.href;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = item.label;
+        actions.append(link);
+      });
+      card.append(copy, actions);
+      board.append(card);
+    });
+    if (!board.children.length) {
+      addText(board, "p", "empty-state", "No Skill Booster resource is approved.");
+    }
+  }
+
+  function installSectionMemory() {
+    document.addEventListener(
+      "toggle",
+      (event) => {
+        const section = event.target;
+        if (!section.matches?.("details[data-section-key]")) return;
+        localStorage.setItem(
+          sectionStatePrefix + section.dataset.sectionKey,
+          section.open ? "1" : "0",
+        );
+      },
+      true,
+    );
+  }
+
+  function restoreSectionStates(root) {
+    root.querySelectorAll("details[data-section-key]").forEach((section) => {
+      const saved = localStorage.getItem(
+        sectionStatePrefix + section.dataset.sectionKey,
+      );
+      if (saved === "1" || saved === "0") section.open = saved === "1";
+    });
   }
 
   function handleControlChange(event) {
@@ -406,7 +515,9 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    installSectionMemory();
     bindLinks();
+    renderBoosters();
     renderBoards();
     loadVerifiedCommit();
     document.body.addEventListener("change", handleControlChange);

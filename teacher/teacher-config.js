@@ -39,6 +39,17 @@ window.NELSON_TEACHER_PORTAL = {
       },
     ],
   },
+  boosters: [
+    {
+      id: "grammar",
+      title: "Grammar course book",
+      status: "Released reference",
+      note: "Approved course reference. No separate Skill Booster homework is assigned.",
+      studentRoute: "boosters/grammar/",
+      teacherHref:
+        "https://drive.google.com/file/d/1tL1Yhsu7cJ7BGFO83s1jjtUQsJ2y5o4r/view",
+    },
+  ],
   matchedBoosterFiles: {
     grammar:
       "https://drive.google.com/file/d/1tL1Yhsu7cJ7BGFO83s1jjtUQsJ2y5o4r/view",

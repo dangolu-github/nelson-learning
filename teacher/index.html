@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,11 +7,11 @@
   <meta name="description" content="Nelson portal release controls">
   <title>Nelson · Teacher Portal</title>
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="teacher.css?v=20260726a">
+  <link rel="stylesheet" href="teacher.css?v=20260726b">
   <script src="../assets/portal-data.js" defer></script>
-  <script src="teacher-config.js?v=20260726a" defer></script>
+  <script src="teacher-config.js?v=20260726b" defer></script>
   <script src="teacher-access.js?v=20260726a" defer></script>
-  <script src="teacher.js?v=20260726a" defer></script>
+  <script src="teacher.js?v=20260726b" defer></script>
 </head>
 <body>
   <main class="teacher-shell protected-page" hidden>
@@ -22,28 +22,35 @@
         <p class="hero-copy">Class release, matched materials, homework checking, and archive.</p>
       </div>
       <div class="hero-actions">
-        <a class="primary-action" data-private-link="homeworkWorkspace" target="_blank" rel="noopener">Open teacher workspace</a>
-        <a class="quiet-action" data-private-link="controlSheet" target="_blank" rel="noopener">Open durable controls</a>
+        <a class="primary-action" href="#" data-private-link="homeworkWorkspace" target="_blank" rel="noopener">Open teacher workspace</a>
+        <a class="quiet-action" href="#" data-private-link="controlSheet" target="_blank" rel="noopener">Open durable controls</a>
         <button id="lock-teacher-portal" class="quiet-action" type="button">Lock portal</button>
       </div>
     </header>
 
     <nav class="quick-links" aria-label="Teacher workspaces">
-      <a data-private-link="studentSite" target="_blank" rel="noopener">
+      <a href="#" data-private-link="studentSite" target="_blank" rel="noopener">
         <span>Student site</span><strong>Open live portal</strong>
       </a>
-      <a data-private-link="homeworkWorkspace" target="_blank" rel="noopener">
+      <a href="#" data-private-link="homeworkWorkspace" target="_blank" rel="noopener">
         <span>Homework</span><strong>Check, comment, explain</strong>
       </a>
-      <a data-private-link="courseTracker" target="_blank" rel="noopener">
+      <a href="#" data-private-link="courseTracker" target="_blank" rel="noopener">
         <span>Course record</span><strong>Open tracker</strong>
       </a>
-      <a data-private-link="teacherMaterials" target="_blank" rel="noopener">
+      <a href="#" data-private-link="teacherMaterials" target="_blank" rel="noopener">
         <span>Teacher files</span><strong>Open private folder</strong>
       </a>
     </nav>
 
-    <section class="presence-panel" aria-labelledby="presence-title">
+    <nav class="section-nav" aria-label="Teacher portal sections">
+      <a href="#overview">Overview</a>
+      <a href="#class-publication">Class publication</a>
+      <a href="#skill-boosters">Skill boosters</a>
+      <a href="#archive">Archive</a>
+    </nav>
+
+    <section id="overview" class="presence-panel" aria-labelledby="presence-title">
       <div>
         <p class="eyebrow">Student site presence</p>
         <h2 id="presence-title"><span id="active-viewer-count">—</span> viewing now</h2>
@@ -52,39 +59,83 @@
       <span id="presence-status" class="presence-status checking" role="status" aria-live="polite">Checking</span>
     </section>
 
-    <section class="control-section" aria-labelledby="active-title">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Current teaching</p>
-          <h2 id="active-title">Active class dates</h2>
-        </div>
+    <section id="release-overview" class="status-grid" aria-label="Release overview">
+      <article><span>Released classes</span><strong id="released-class-count">—</strong></article>
+      <article><span>Future or locked</span><strong id="locked-class-count">—</strong></article>
+      <article><span>Draft changes</span><strong id="draft-change-count">—</strong></article>
+      <article><span>Approved boosters</span><strong id="booster-count">—</strong></article>
+    </section>
+
+    <details class="control-section panel-toggle" id="class-publication" data-section-key="class-publication" open>
+      <summary class="section-toggle-heading">
+        <h2 class="section-summary">
+          <span class="section-toggle-copy">
+            <span class="eyebrow">Publication</span>
+            <span class="section-title">Class handouts and dated homework</span>
+            <span class="section-description">Released classes and locked future classes stay separate.</span>
+          </span>
+          <span class="section-toggle-label" aria-hidden="true"></span>
+        </h2>
+      </summary>
+      <div class="section-toggle-body">
         <div class="heading-actions">
           <span class="commit-chip"><small>Verified commit</small><strong id="verified-commit">Loading…</strong></span>
           <button id="reset-plan" class="quiet-action dark" type="button">Reset draft</button>
           <button id="copy-plan" class="primary-action" type="button">Copy change plan</button>
         </div>
+        <p class="planning-note">
+          List, Access, Guidance, Placement, and Review remain independent. A
+          draft is not live until GitHub is published and verified.
+        </p>
+        <section class="release-group" aria-labelledby="released-title">
+          <div class="group-heading">
+            <div><h3 id="released-title">Released class dates</h3><p>Student can open these class pages.</p></div>
+            <span id="released-board-count" class="group-count">0</span>
+          </div>
+          <div id="released-release-board" class="release-board scroll-window"></div>
+        </section>
+        <section class="release-group" aria-labelledby="locked-title">
+          <div class="group-heading">
+            <div><h3 id="locked-title">Future or locked class dates</h3><p>Listed items can remain visible without opening their files.</p></div>
+            <span id="locked-board-count" class="group-count">0</span>
+          </div>
+          <div id="locked-release-board" class="release-board scroll-window"></div>
+        </section>
+        <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
       </div>
-      <p class="planning-note">
-        Keep List, Access, Guidance, Placement, and Review independent. A draft is
-        not live until GitHub is published and verified.
-      </p>
-      <div id="active-release-board" class="release-board"></div>
-      <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
-    </section>
+    </details>
 
-    <section class="control-section archive-section" aria-labelledby="archive-title">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Filed by original class date</p>
-          <h2 id="archive-title">Archive</h2>
-        </div>
+    <details class="control-section panel-toggle" id="skill-boosters" data-section-key="skill-boosters" open>
+      <summary class="section-toggle-heading">
+        <h2 class="section-summary">
+          <span class="section-toggle-copy">
+            <span class="eyebrow">Reusable practice</span>
+            <span class="section-title">Skill boosters</span>
+            <span class="section-description">Separate from dated class homework.</span>
+          </span>
+          <span class="section-toggle-label" aria-hidden="true"></span>
+        </h2>
+      </summary>
+      <div class="section-toggle-body">
+        <div id="booster-board" class="booster-board scroll-window"></div>
       </div>
-      <p class="planning-note">
-        An archived class keeps its original date and the same Class handout,
-        Homework, and Class summary subsections.
-      </p>
-      <div id="archive-release-board" class="release-board"></div>
-    </section>
+    </details>
+
+    <details class="control-section panel-toggle archive-section" id="archive" data-section-key="archive">
+      <summary class="section-toggle-heading">
+        <h2 class="section-summary">
+          <span class="section-toggle-copy">
+            <span class="eyebrow">Filed by original class date</span>
+            <span class="section-title">Archive</span>
+            <span class="section-description">Archived material keeps its Class handout, Homework, and Class summary subsections.</span>
+          </span>
+          <span class="section-toggle-label" aria-hidden="true"></span>
+        </h2>
+      </summary>
+      <div class="section-toggle-body">
+        <div id="archive-release-board" class="release-board scroll-window"></div>
+      </div>
+    </details>
 
     <p class="privacy-note">
       This GitHub page contains public-safe release information only. Teacher
