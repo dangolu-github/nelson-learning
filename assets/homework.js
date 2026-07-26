@@ -15,6 +15,7 @@
   let localTimer;
   let remoteTimer;
   let remoteRetryTimer;
+  let reviewPdfUrl = "";
   let submitted = Boolean(state.submittedAt);
 
   installStatus();
@@ -23,6 +24,9 @@
   updateStatus();
   bindFields();
   checkAssignment();
+  window.setInterval(() => {
+    if (submitted) checkTeacherReview();
+  }, 20000);
 
   function freshState() {
     return {
@@ -323,10 +327,10 @@
     panel.innerHTML = `
       <div class="teacher-review-heading">
         <div>
-          <p class="eyebrow">Teacher review</p>
-          <h2>Checked feedback</h2>
+          <p class="eyebrow">After submission</p>
+          <h2>Released answers and teacher review</h2>
         </div>
-        <span class="teacher-review-chip">Checked</span>
+        <span class="teacher-review-chip">Released</span>
       </div>
       <div class="teacher-review-content"></div>`;
     document.querySelector(".homework-document").append(panel);
@@ -337,8 +341,9 @@
       "getHomeworkReview",
       { submissionId: state.saveId, assignmentId: page.assignmentId },
       (data) => {
-        if (!data?.ok || data.pending) return;
-        renderTeacherReview(data);
+        if (!data?.ok) return;
+        renderReleasedAnswers(data.answers || []);
+        renderTeacherReview(data.review);
       },
       () => {
         // The submitted work remains confirmed when review is temporarily unavailable.
@@ -346,25 +351,113 @@
     );
   }
 
-  function renderTeacherReview(data) {
+  function renderReleasedAnswers(items) {
+    document.querySelectorAll(".released-answer").forEach((item) => item.remove());
+    items.forEach((item) => {
+      const field = document.querySelector(
+        `[data-response-id="${CSS.escape(item.responseId)}"]`,
+      );
+      const question = field?.closest(".homework-question");
+      if (!question) return;
+      const answer = document.createElement("div");
+      answer.className = "released-answer";
+      const label = document.createElement("span");
+      const copy = document.createElement("p");
+      label.textContent = "Answer";
+      copy.textContent = item.answer;
+      answer.append(label, copy);
+      question.append(answer);
+    });
+  }
+
+  function renderTeacherReview(review) {
     const panel = document.querySelector(".teacher-review");
     const content = panel.querySelector(".teacher-review-content");
+    if (reviewPdfUrl) {
+      URL.revokeObjectURL(reviewPdfUrl);
+      reviewPdfUrl = "";
+    }
     content.replaceChildren();
-    [
-      ["Checked result", data.result],
-      ["Teacher comment", data.comment],
-      ["Explanation", data.explanation],
-    ].forEach(([label, value]) => {
-      if (!String(value || "").trim()) return;
+    if (review?.grade) {
       const item = document.createElement("article");
       const heading = document.createElement("h3");
       const copy = document.createElement("p");
-      heading.textContent = label;
-      copy.textContent = value;
+      heading.textContent = "Grade or result";
+      copy.textContent = review.grade;
       item.append(heading, copy);
       content.append(item);
-    });
+    }
+    if (review?.format === "text" && String(review.text || "").trim()) {
+      const item = document.createElement("article");
+      const heading = document.createElement("h3");
+      const copy = document.createElement("p");
+      heading.textContent = "Teacher review";
+      copy.textContent = review.text;
+      item.append(heading, copy);
+      content.append(item);
+    }
+    if (review?.format === "html" && String(review.html || "").trim()) {
+      const item = document.createElement("article");
+      item.className = "teacher-html-review";
+      const heading = document.createElement("h3");
+      const body = document.createElement("div");
+      heading.textContent = "Teacher review";
+      body.append(safeReviewHtml(review.html));
+      item.append(heading, body);
+      content.append(item);
+    }
+    if (review?.format === "pdf" && review.pdf?.base64) {
+      const item = document.createElement("article");
+      item.className = "teacher-pdf-review";
+      const heading = document.createElement("h3");
+      const frame = document.createElement("iframe");
+      const link = document.createElement("a");
+      const bytes = Uint8Array.from(atob(review.pdf.base64), character =>
+        character.charCodeAt(0),
+      );
+      const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+      reviewPdfUrl = url;
+      heading.textContent = "Teacher PDF review";
+      frame.src = url;
+      frame.title = review.pdf.name || "Teacher PDF review";
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = `Open ${review.pdf.name || "teacher review PDF"}`;
+      item.append(heading, frame, link);
+      content.append(item);
+    }
+    const releasedAnswerCount = document.querySelectorAll(".released-answer").length;
+    if (releasedAnswerCount) {
+      const note = document.createElement("p");
+      note.className = "released-answer-note";
+      note.textContent = `${releasedAnswerCount} answers have been released inside the questions above.`;
+      content.prepend(note);
+    }
     panel.hidden = content.children.length === 0;
+  }
+
+  function safeReviewHtml(html) {
+    const template = document.createElement("template");
+    template.innerHTML = String(html || "");
+    template.content
+      .querySelectorAll("script,style,iframe,object,embed,form,input,button,textarea,select")
+      .forEach((element) => element.remove());
+    template.content.querySelectorAll("*").forEach((element) => {
+      Array.from(element.attributes).forEach((attribute) => {
+        const name = attribute.name.toLowerCase();
+        const value = attribute.value.trim().toLowerCase();
+        if (name.startsWith("on") || name === "style") {
+          element.removeAttribute(attribute.name);
+        } else if (
+          (name === "href" || name === "src") &&
+          (value.startsWith("javascript:") || value.startsWith("data:"))
+        ) {
+          element.removeAttribute(attribute.name);
+        }
+      });
+    });
+    return template.content;
   }
 
   function setSaveText(text) {

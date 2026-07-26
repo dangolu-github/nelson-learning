@@ -403,6 +403,52 @@
   white-space: pre-wrap;
 }
 
+.released-answer {
+  margin-top: 13px;
+  padding: 12px 14px;
+  border-left: 4px solid var(--green);
+  border-radius: 0 10px 10px 0;
+  background: var(--green-soft);
+}
+
+.released-answer span {
+  display: block;
+  color: var(--green);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.released-answer p,
+.released-answer-note {
+  margin: 4px 0 0;
+  font-weight: 400;
+}
+
+.teacher-html-review {
+  line-height: 1.65;
+}
+
+.teacher-pdf-review iframe {
+  width: 100%;
+  min-height: 520px;
+  margin: 10px 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.teacher-pdf-review a {
+  display: inline-flex;
+  border-radius: 999px;
+  background: var(--green);
+  color: #fff;
+  padding: 9px 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
 @media (max-width: 680px) {
   .homework-shell {
     width: 100%;
