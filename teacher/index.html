@@ -7,11 +7,11 @@
   <meta name="description" content="Nelson portal release controls">
   <title>Nelson · Teacher Portal</title>
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="teacher.css">
+  <link rel="stylesheet" href="teacher.css?v=20260726a">
   <script src="../assets/portal-data.js" defer></script>
-  <script src="teacher-config.js" defer></script>
-  <script src="teacher-access.js" defer></script>
-  <script src="teacher.js" defer></script>
+  <script src="teacher-config.js?v=20260726a" defer></script>
+  <script src="teacher-access.js?v=20260726a" defer></script>
+  <script src="teacher.js?v=20260726a" defer></script>
 </head>
 <body>
   <main class="teacher-shell protected-page" hidden>
@@ -42,6 +42,15 @@
         <span>Teacher files</span><strong>Open private folder</strong>
       </a>
     </nav>
+
+    <section class="presence-panel" aria-labelledby="presence-title">
+      <div>
+        <p class="eyebrow">Student site presence</p>
+        <h2 id="presence-title"><span id="active-viewer-count">—</span> viewing now</h2>
+        <p id="presence-detail">Checking the student site…</p>
+      </div>
+      <span id="presence-status" class="presence-status checking" role="status" aria-live="polite">Checking</span>
+    </section>
 
     <section class="control-section" aria-labelledby="active-title">
       <div class="section-heading">

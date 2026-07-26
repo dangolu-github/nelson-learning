@@ -5,13 +5,25 @@
   const expectedDigest =
     "358a3cd454c38404d1162e39500b2fca02ee644c45bc5a886af173579c1e9549";
   const storageKey = "nelsonTeacherPortalAccess";
+  const roleKey = "nelsonPortalDeviceRoleV1";
+  let resolveReady;
+  const ready = new Promise((resolve) => {
+    resolveReady = resolve;
+  });
+
+  window.NelsonTeacherAccess = {
+    ready,
+    answerHash: expectedDigest,
+  };
 
   function revealPage() {
+    localStorage.setItem(roleKey, "teacher");
     document.documentElement.classList.add("portal-unlocked");
     document.querySelectorAll(".protected-page").forEach((element) => {
       element.hidden = false;
     });
     document.querySelector(".access-gate")?.remove();
+    resolveReady();
   }
 
   function bytesToHex(buffer) {

@@ -4,6 +4,10 @@
   const data = window.NELSON_PORTAL_DATA;
   const config = window.NELSON_TEACHER_PORTAL;
   const draftKey = "nelsonTeacherReleaseDraftV2";
+  const viewerDeviceKey = "nelsonPortalViewerDeviceV1";
+  const roleKey = "nelsonPortalDeviceRoleV1";
+  let presenceToken = "";
+  let presenceTimer = 0;
   if (!data || !config) return;
 
   const resourceById = new Map(
@@ -263,6 +267,126 @@
     });
   }
 
+  function randomId() {
+    if (crypto.randomUUID) return crypto.randomUUID();
+    return (
+      Date.now().toString(36) +
+      Math.random().toString(36).slice(2) +
+      Math.random().toString(36).slice(2)
+    );
+  }
+
+  function viewerDeviceId() {
+    const existing = localStorage.getItem(viewerDeviceKey);
+    if (existing) return existing;
+    const created = randomId();
+    localStorage.setItem(viewerDeviceKey, created);
+    return created;
+  }
+
+  function requestPresence(action, parameters) {
+    return new Promise((resolve, reject) => {
+      const callbackName =
+        "__nelsonTeacherPresence" +
+        Date.now() +
+        Math.random().toString(16).slice(2);
+      const script = document.createElement("script");
+      const timeout = window.setTimeout(() => {
+        cleanup();
+        reject(new Error("Presence request timed out."));
+      }, 10000);
+      function cleanup() {
+        window.clearTimeout(timeout);
+        delete window[callbackName];
+        script.remove();
+      }
+      window[callbackName] = (result) => {
+        cleanup();
+        resolve(result);
+      };
+      script.onerror = () => {
+        cleanup();
+        reject(new Error("Presence request failed."));
+      };
+      const query = new URLSearchParams({
+        ...parameters,
+        action,
+        callback: callbackName,
+        _: String(Date.now()),
+      });
+      script.src = `${config.presenceEndpoint}?${query.toString()}`;
+      document.head.append(script);
+    });
+  }
+
+  function clearTeacherDevicePresence() {
+    if (!presenceToken) return;
+    fetch(config.presenceEndpoint, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "clearViewerPresence",
+        accessToken: presenceToken,
+        deviceId: viewerDeviceId(),
+      }),
+    }).catch(() => {
+      // The next status refresh will still exclude expired sessions.
+    });
+  }
+
+  function renderPresence(result) {
+    const count = Number(result?.activeViewerCount) || 0;
+    const status = count > 0 ? "online" : "offline";
+    const noun = count === 1 ? "student device" : "student devices";
+    document.querySelector("#active-viewer-count").textContent = String(count);
+    document.querySelector("#presence-detail").textContent =
+      `${count} ${noun} active in the last ${result.expirySeconds || 90} seconds. This teacher device is excluded.`;
+    const chip = document.querySelector("#presence-status");
+    chip.className = `presence-status ${status}`;
+    chip.textContent = status === "online" ? "Student online" : "No student online";
+  }
+
+  function renderPresenceError() {
+    document.querySelector("#presence-detail").textContent =
+      "The live presence service is unavailable. This does not affect the student site.";
+    const chip = document.querySelector("#presence-status");
+    chip.className = "presence-status error";
+    chip.textContent = "Unavailable";
+  }
+
+  async function refreshPresence() {
+    if (!presenceToken) return;
+    try {
+      const result = await requestPresence("getViewerPresence", {
+        accessToken: presenceToken,
+      });
+      if (!result?.ok) throw new Error("Presence response was not accepted.");
+      renderPresence(result);
+    } catch {
+      renderPresenceError();
+    }
+  }
+
+  async function startPresencePanel() {
+    localStorage.setItem(roleKey, "teacher");
+    try {
+      const accessResult = await requestPresence("verifyPortalAccess", {
+        answerHash: window.NelsonTeacherAccess.answerHash,
+      });
+      if (!accessResult?.ok || !accessResult.allowed || !accessResult.accessToken) {
+        throw new Error("Teacher presence access was not accepted.");
+      }
+      presenceToken = accessResult.accessToken;
+      clearTeacherDevicePresence();
+      await refreshPresence();
+      window.clearInterval(presenceTimer);
+      presenceTimer = window.setInterval(refreshPresence, 20000);
+    } catch {
+      renderPresenceError();
+    }
+  }
+
   async function loadVerifiedCommit() {
     const target = document.querySelector("#verified-commit");
     target.textContent = config.verifiedCommit;
@@ -292,5 +416,6 @@
       localStorage.removeItem("nelsonTeacherPortalAccess");
       window.location.reload();
     });
+    window.NelsonTeacherAccess.ready.then(startPresencePanel);
   });
 })();

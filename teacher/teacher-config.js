@@ -1,5 +1,7 @@
 window.NELSON_TEACHER_PORTAL = {
   verifiedCommit: "Live main",
+  presenceEndpoint:
+    "https://script.google.com/macros/s/AKfycbzYMt-NPbEcVtvs7SQ1CbfxP6qaKF5ysS497P-hSEdCGJURcvqI4DKzqQXBEywraHmQiQ/exec",
   repositoryApi:
     "https://api.github.com/repos/dangolu-github/nelson-learning/commits/main",
   studentSite: "https://dangolu-github.github.io/nelson-learning/",
