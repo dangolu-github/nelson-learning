@@ -220,6 +220,11 @@
   margin-top: 12px;
 }
 
+.binary-choice-group {
+  grid-template-columns: repeat(2, minmax(0, 140px));
+  justify-content: start;
+}
+
 .choice-card {
   width: 100%;
   border: 1px solid #c5cec9;
@@ -233,6 +238,11 @@
   text-align: left;
   cursor: pointer;
   transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+
+.binary-choice-button {
+  padding: 10px 18px;
+  text-align: center;
 }
 
 .choice-card:hover {
@@ -249,6 +259,10 @@
   border-color: var(--green);
   background: var(--green-soft);
   box-shadow: inset 4px 0 0 var(--green);
+}
+
+.binary-choice-button.is-selected {
+  box-shadow: inset 0 -4px 0 var(--green);
 }
 
 .choice-card:disabled {
@@ -421,6 +435,9 @@
   }
   .report-answer-grid .homework-question:last-child {
     grid-column: auto;
+  }
+  .binary-choice-group {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .homework-status {
     margin: 12px;

@@ -385,20 +385,34 @@
       const writtenChoices = copy
         ? copy.textContent.split(/\s+·\s+/).map((item) => item.trim())
         : [];
+      const options = Array.from(select.options).slice(1);
+      const isTrueFalse =
+        select.dataset.choiceLayout === "binary" ||
+        (options.length === 2 &&
+          options[0].value === "T" &&
+          options[0].textContent.trim().toLowerCase() === "true" &&
+          options[1].value === "F" &&
+          options[1].textContent.trim().toLowerCase() === "false");
       const group = document.createElement("div");
       group.className = "choice-group";
+      if (isTrueFalse) group.classList.add("binary-choice-group");
       group.setAttribute("role", "radiogroup");
-      group.setAttribute("aria-label", "Choose one answer");
+      group.setAttribute(
+        "aria-label",
+        isTrueFalse ? "Choose True or False" : "Choose one answer",
+      );
 
-      Array.from(select.options).slice(1).forEach((option, index) => {
+      options.forEach((option, index) => {
         const button = document.createElement("button");
         const optionLabel = option.textContent.trim();
         button.type = "button";
         button.className = "choice-card";
+        if (isTrueFalse) button.classList.add("binary-choice-button");
         button.dataset.choiceValue = option.value;
         button.setAttribute("role", "radio");
         button.setAttribute("aria-checked", "false");
         button.textContent =
+          (isTrueFalse && optionLabel) ||
           writtenChoices[index] ||
           (/^[A-Z0-9]+\s*[—–-]\s+/i.test(optionLabel)
             ? optionLabel
