@@ -21,7 +21,7 @@
   window.setInterval(loadReveals, 15000);
 
   function loadReveals() {
-    jsonp("getLessonReveals", { lessonId }, (data) => {
+    request("getLessonReveals", { lessonId }, (data) => {
       if (!data?.ok) return;
       render(data.items || []);
     });
@@ -73,7 +73,41 @@
     return details;
   }
 
-  function jsonp(action, parameters, success) {
+  async function request(action, parameters, success) {
+    await window.NelsonPortalAccess.ready;
+    if (isDirectAppsScriptEndpoint()) {
+      legacyJsonp(action, parameters, success);
+      return;
+    }
+    try {
+      const response = await fetch(portal.serviceEndpoint, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-store",
+        credentials: "omit",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action,
+          ...parameters,
+          accessToken: window.NelsonPortalAccess?.getToken() || "",
+        }),
+      });
+      if (!response.ok) return;
+      success(await response.json());
+    } catch {
+      // Reveals remain locked when the service is unavailable.
+    }
+  }
+
+  function isDirectAppsScriptEndpoint() {
+    try {
+      return new URL(portal.serviceEndpoint).hostname === "script.google.com";
+    } catch {
+      return false;
+    }
+  }
+
+  function legacyJsonp(action, parameters, success) {
     const callback =
       "__nelsonLesson" + Date.now() + Math.random().toString(16).slice(2);
     const script = document.createElement("script");

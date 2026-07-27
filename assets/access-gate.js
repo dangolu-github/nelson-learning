@@ -107,11 +107,40 @@
     }
   }
 
-  function request(action, parameters, success, failure) {
+  async function request(action, parameters, success, failure) {
     if (!endpoint || endpoint.includes("__NELSON_")) {
       failure();
       return;
     }
+    if (isDirectAppsScriptEndpoint()) {
+      legacyJsonp(action, parameters, success, failure);
+      return;
+    }
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-store",
+        credentials: "omit",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action, ...parameters }),
+      });
+      if (!response.ok) throw new Error("Portal request failed.");
+      success(await response.json());
+    } catch {
+      failure();
+    }
+  }
+
+  function isDirectAppsScriptEndpoint() {
+    try {
+      return new URL(endpoint).hostname === "script.google.com";
+    } catch {
+      return false;
+    }
+  }
+
+  function legacyJsonp(action, parameters, success, failure) {
     const callbackName =
       "__nelsonPortalGate" + Date.now() + Math.random().toString(16).slice(2);
     const script = document.createElement("script");

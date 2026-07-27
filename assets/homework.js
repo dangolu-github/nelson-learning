@@ -168,7 +168,7 @@
   }
 
   function verifyProgress(attempt) {
-    jsonp(
+    request(
       "getHomeworkProgress",
       { saveId: state.saveId, assignmentId: page.assignmentId },
       (data) => {
@@ -206,7 +206,7 @@
   }
 
   function checkAssignment() {
-    jsonp(
+    request(
       "getAssignmentState",
       { assignmentId: page.assignmentId },
       (data) => {
@@ -265,7 +265,7 @@
   }
 
   function confirmSubmission(submittedAt, attempt) {
-    jsonp(
+    request(
       "getSubmission",
       { submissionId: state.saveId, assignmentId: page.assignmentId },
       (data) => {
@@ -335,7 +335,7 @@
   function loadRevision(revisionNumber, sourceSubmissionId) {
     if (revisionLoading || !sourceSubmissionId) return;
     revisionLoading = true;
-    jsonp(
+    request(
       "getRevisionSource",
       {
         assignmentId: page.assignmentId,
@@ -426,7 +426,7 @@
   }
 
   function checkTeacherReview() {
-    jsonp(
+    request(
       "getHomeworkReview",
       { submissionId: state.saveId, assignmentId: page.assignmentId },
       (data) => {
@@ -442,7 +442,7 @@
   }
 
   function checkAttemptHistory() {
-    jsonp(
+    request(
       "getHomeworkHistory",
       { assignmentId: page.assignmentId },
       (data) => {
@@ -728,7 +728,41 @@
     if (response.type !== "opaque" && !response.ok) throw new Error("Sync failed");
   }
 
-  function jsonp(action, parameters, success, failure) {
+  async function request(action, parameters, success, failure = () => {}) {
+    await window.NelsonPortalAccess.ready;
+    if (isDirectAppsScriptEndpoint()) {
+      legacyJsonp(action, parameters, success, failure);
+      return;
+    }
+    try {
+      const response = await fetch(portal.serviceEndpoint, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-store",
+        credentials: "omit",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action,
+          ...parameters,
+          accessToken: accessToken(),
+        }),
+      });
+      if (!response.ok) throw new Error("Homework read failed.");
+      success(await response.json());
+    } catch {
+      failure();
+    }
+  }
+
+  function isDirectAppsScriptEndpoint() {
+    try {
+      return new URL(portal.serviceEndpoint).hostname === "script.google.com";
+    } catch {
+      return false;
+    }
+  }
+
+  function legacyJsonp(action, parameters, success, failure) {
     const callback =
       "__nelsonHomework" + Date.now() + Math.random().toString(16).slice(2);
     const script = document.createElement("script");
