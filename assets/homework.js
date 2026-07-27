@@ -16,19 +16,24 @@
   let remoteTimer;
   let remoteRetryTimer;
   let reviewPdfUrl = "";
+  let historyPdfUrls = [];
   let submitted = Boolean(state.submittedAt);
+  let revisionLoading = false;
 
   installStatus();
   installTeacherReview();
+  installAttemptHistory();
   restoreFields();
   updateStatus();
   bindFields();
   checkAssignment();
+  checkAttemptHistory();
   window.setInterval(() => {
-    if (submitted) checkTeacherReview();
+    checkAssignment();
+    checkAttemptHistory();
   }, 20000);
 
-  function freshState() {
+  function freshState(seed = {}) {
     return {
       assignmentId: page.assignmentId,
       assignmentTitle: page.assignmentTitle,
@@ -43,6 +48,10 @@
       responses: {},
       remoteStarted: false,
       submittedAt: "",
+      attemptNumber: 1,
+      layoutVersion: page.layoutVersion || "legacy-v1",
+      parentSubmissionId: "",
+      ...seed,
     };
   }
 
@@ -147,6 +156,9 @@
         saveId: state.saveId,
         startedAt: state.startedAt,
         clientUpdatedAt: state.clientUpdatedAt,
+        attemptNumber: state.attemptNumber,
+        layoutVersion: state.layoutVersion,
+        parentSubmissionId: state.parentSubmissionId,
         responses: state.responses,
       });
       verifyProgress(0);
@@ -204,6 +216,10 @@
         } else if (data.receiving === false) {
           lockPage("Receiving is currently paused.");
         }
+        if (Number(data.revisionNumber || 0) > Number(state.attemptNumber || 1)) {
+          loadRevision(Number(data.revisionNumber), data.reopenSourceSubmissionId);
+          return;
+        }
         if (submitted) checkTeacherReview();
       },
       () => {},
@@ -235,6 +251,9 @@
         startedAt: state.startedAt,
         clientUpdatedAt: state.clientUpdatedAt,
         submittedAt,
+        attemptNumber: state.attemptNumber,
+        layoutVersion: state.layoutVersion,
+        parentSubmissionId: state.parentSubmissionId,
         responses: state.responses,
       });
       confirmSubmission(submittedAt, 0);
@@ -262,6 +281,7 @@
           }
           lockPage(`Submitted successfully · ${data.answeredCount} answers received`);
           checkTeacherReview();
+          checkAttemptHistory();
           return;
         }
         if (attempt < 10) {
@@ -298,7 +318,11 @@
 
   function clearDraft() {
     if (submitted || !window.confirm("Clear the answers saved on this device?")) return;
-    state = freshState();
+    state = freshState({
+      attemptNumber: state.attemptNumber,
+      layoutVersion: state.layoutVersion,
+      parentSubmissionId: state.parentSubmissionId,
+    });
     fields.forEach((field) => {
       field.value = "";
       syncChoiceControl(field);
@@ -306,6 +330,55 @@
     localStorage.setItem(storageKey, JSON.stringify(state));
     updateStatus();
     setSaveText("New blank draft saved on this device");
+  }
+
+  function loadRevision(revisionNumber, sourceSubmissionId) {
+    if (revisionLoading || !sourceSubmissionId) return;
+    revisionLoading = true;
+    jsonp(
+      "getRevisionSource",
+      {
+        assignmentId: page.assignmentId,
+        submissionId: sourceSubmissionId,
+        revisionNumber: String(revisionNumber),
+      },
+      (data) => {
+        revisionLoading = false;
+        if (!data?.ok || !data.reopened) return;
+        state = freshState({
+          attemptNumber: Number(data.revisionNumber) || revisionNumber,
+          layoutVersion: data.layoutVersion || page.layoutVersion || "legacy-v1",
+          parentSubmissionId: data.sourceSubmissionId || sourceSubmissionId,
+          responses: data.responses || {},
+          clientUpdatedAt: new Date().toISOString(),
+        });
+        submitted = false;
+        restoreFields();
+        unlockPageForRevision();
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch {
+          // The revision will still synchronize after the next answer change.
+        }
+        updateStatus();
+        setSaveText("Revision draft ready");
+        scheduleRemoteSave();
+      },
+      () => {
+        revisionLoading = false;
+      },
+    );
+  }
+
+  function unlockPageForRevision() {
+    fields.forEach((field) => {
+      field.disabled = false;
+      syncChoiceControl(field);
+    });
+    const button = document.querySelector("#homework-submit");
+    button.disabled = false;
+    button.textContent = "Submit revision";
+    showMessage("Revision reopened. Your previous answers are ready to edit.", false);
   }
 
   function showMessage(message, isError) {
@@ -336,6 +409,22 @@
     document.querySelector(".homework-document").append(panel);
   }
 
+  function installAttemptHistory() {
+    const panel = document.createElement("section");
+    panel.className = "attempt-history";
+    panel.hidden = true;
+    panel.setAttribute("aria-live", "polite");
+    panel.innerHTML = `
+      <div class="teacher-review-heading">
+        <div>
+          <p class="eyebrow">Previous work</p>
+          <h2>Submission history</h2>
+        </div>
+      </div>
+      <div class="attempt-history-content"></div>`;
+    document.querySelector(".homework-document").append(panel);
+  }
+
   function checkTeacherReview() {
     jsonp(
       "getHomeworkReview",
@@ -343,11 +432,23 @@
       (data) => {
         if (!data?.ok) return;
         renderReleasedAnswers(data.answers || []);
+        renderResponseReviews(data.review?.responseReviews || []);
         renderTeacherReview(data.review);
       },
       () => {
         // The submitted work remains confirmed when review is temporarily unavailable.
       },
+    );
+  }
+
+  function checkAttemptHistory() {
+    jsonp(
+      "getHomeworkHistory",
+      { assignmentId: page.assignmentId },
+      (data) => {
+        if (data?.ok) renderAttemptHistory(data.attempts || []);
+      },
+      () => {},
     );
   }
 
@@ -434,6 +535,83 @@
       note.textContent = `${releasedAnswerCount} answers have been released inside the questions above.`;
       content.prepend(note);
     }
+    panel.hidden = content.children.length === 0;
+  }
+
+  function renderResponseReviews(items) {
+    document.querySelectorAll(".released-response-review").forEach((item) => item.remove());
+    items.forEach((item) => {
+      const field = document.querySelector(
+        `[data-response-id="${CSS.escape(item.responseId)}"]`,
+      );
+      const question = field?.closest(".homework-question");
+      if (!question) return;
+      const review = document.createElement("div");
+      review.className = "released-response-review";
+      const status = document.createElement("span");
+      const comment = document.createElement("p");
+      status.textContent = item.status || "Not marked";
+      comment.textContent = item.comment || "";
+      review.append(status);
+      if (comment.textContent) review.append(comment);
+      question.append(review);
+    });
+  }
+
+  function renderAttemptHistory(attempts) {
+    const panel = document.querySelector(".attempt-history");
+    const content = panel.querySelector(".attempt-history-content");
+    historyPdfUrls.forEach((url) => URL.revokeObjectURL(url));
+    historyPdfUrls = [];
+    content.replaceChildren();
+    attempts.forEach((attempt) => {
+      if (!attempt.review) return;
+      if (
+        submitted &&
+        String(attempt.submissionId || "") === String(state.saveId || "")
+      ) return;
+      const details = document.createElement("details");
+      const summary = document.createElement("summary");
+      const body = document.createElement("div");
+      summary.textContent =
+        `Attempt ${attempt.attemptNumber || 1} · ${attempt.submittedAt || "submitted"}`;
+      if (attempt.review.grade) {
+        const grade = document.createElement("p");
+        grade.textContent = `Overall grade: ${attempt.review.grade}`;
+        body.append(grade);
+      }
+      (attempt.review.responseReviews || []).forEach((item) => {
+        const row = document.createElement("p");
+        row.textContent =
+          `${item.responseId}: ${item.status}${item.comment ? ` — ${item.comment}` : ""}`;
+        body.append(row);
+      });
+      if (attempt.review.format === "text" && attempt.review.text) {
+        const feedback = document.createElement("p");
+        feedback.textContent = attempt.review.text;
+        body.append(feedback);
+      }
+      if (attempt.review.format === "html" && attempt.review.html) {
+        const feedback = document.createElement("div");
+        feedback.append(safeReviewHtml(attempt.review.html));
+        body.append(feedback);
+      }
+      if (attempt.review.format === "pdf" && attempt.review.pdf?.base64) {
+        const bytes = Uint8Array.from(atob(attempt.review.pdf.base64), (character) =>
+          character.charCodeAt(0),
+        );
+        const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+        historyPdfUrls.push(url);
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = `Open ${attempt.review.pdf.name || "teacher review PDF"}`;
+        body.append(link);
+      }
+      details.append(summary, body);
+      content.append(details);
+    });
     panel.hidden = content.children.length === 0;
   }
 
