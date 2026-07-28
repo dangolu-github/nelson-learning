@@ -1,0 +1,53 @@
+name: Deploy learner portal to CloudBase
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nelson-cloudbase-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out the verified commit
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Build the learner-only site
+        run: npm run build:cloudbase
+
+      - name: Install the pinned CloudBase CLI
+        run: npm install --global @cloudbase/cli@3.6.4
+
+      - name: Authenticate to the Nelson CloudBase environment
+        run: >-
+          tcb login
+          --cloudbase-api-key "${{ secrets.TCB_API_KEY }}"
+          --env-id "${{ secrets.TCB_ENV_ID }}"
+          --json
+
+      - name: Deploy a new learner-only application version
+        run: >-
+          tcb app deploy nelson-learning-git
+          --env-id "${{ secrets.TCB_ENV_ID }}"
+          --framework static
+          --install-command "npm install"
+          --build-command "npm run build:cloudbase"
+          --output-dir "./cloudbase-dist"
+          --deploy-path "/"
+          --force
+          --json
