@@ -15,3 +15,12 @@ IELTS-standard B1-B2 English course.
 - Private Google files remain owner-only; their links do not grant access.
 - The access screen is a low-friction device gate. GitHub Pages is static, so it is not strong file-level authentication.
 - Course evidence states remain controlled by the Nelson course index and checked learner work.
+
+## Mainland mirror
+
+GitHub `main` is the canonical source for the Tencent CloudBase learner mirror.
+CloudBase runs `npm run build:cloudbase` and publishes `cloudbase-dist/`.
+That build uses an explicit learner-only allowlist: the portal root files,
+public assets, approved boosters, and every top-level released date directory.
+It never publishes `/teacher/`, repository operations, planning files, or
+private records.

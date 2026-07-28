@@ -1,0 +1,10 @@
+{
+  "name": "nelson-learning-portal",
+  "private": true,
+  "scripts": {
+    "build:cloudbase": "node scripts/build-cloudbase-site.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
