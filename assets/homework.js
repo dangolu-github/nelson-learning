@@ -106,7 +106,9 @@
         <button type="button" id="homework-clear">Clear local draft</button>
         <button type="button" class="primary" id="homework-submit">Submit homework</button>
       </div>`;
-    document.querySelector(".homework-shell").append(panel);
+    const shell = document.querySelector(".homework-shell");
+    const documentPanel = shell.querySelector(".homework-document");
+    shell.insertBefore(panel, documentPanel);
     panel.querySelector("#homework-clear").addEventListener("click", clearDraft);
     panel.querySelector("#homework-submit").addEventListener("click", submitHomework);
   }

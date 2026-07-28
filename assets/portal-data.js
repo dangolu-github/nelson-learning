@@ -114,7 +114,7 @@ window.NELSON_PORTAL_DATA = {
         },
       ],
       review:
-        "We learned to identify the starter, verb and receiver before building a passive sentence. Direct examples helped, but the active-to-passive rewrite was not yet stable, so the homework gives controlled practice before new passive tenses. We also prepared a method for the school English A task: compare two news articles about the same event, annotate the same categories in both, and plan a PETAL comparison before writing.",
+        "We learned to identify the starter, verb and receiver before building a passive sentence. Direct examples helped, but the active-to-passive rewrite was not yet stable, so the homework gives controlled practice before new passive tenses. We also discussed future school literature preparation. Nelson should collect and send the complete list of the ten reading titles assigned by school so future lessons can be prepared from the correct texts and editions.",
       reviewVisible: true,
     },
     {

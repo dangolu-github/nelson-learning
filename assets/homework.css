@@ -309,9 +309,9 @@
 
 .homework-status {
   position: sticky;
-  bottom: 12px;
-  z-index: 10;
-  margin: 22px 0 0;
+  top: 12px;
+  z-index: 20;
+  margin: 0 0 18px;
   padding: 15px 18px;
   border: 1px solid var(--line);
   border-radius: 15px;
@@ -546,7 +546,8 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .homework-status {
-    margin: 12px;
+    top: 6px;
+    margin: 0 0 12px;
   }
   .teacher-review-heading {
     flex-direction: column;
