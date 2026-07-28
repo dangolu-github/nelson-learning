@@ -20,6 +20,8 @@ IELTS-standard B1-B2 English course.
 
 GitHub `main` is the canonical source for the Tencent CloudBase learner mirror.
 CloudBase runs `npm run build:cloudbase` and publishes `cloudbase-dist/`.
+The `nelson-learning-git` personal-repository deployment watches `main` for
+future updates.
 That build uses an explicit learner-only allowlist: the portal root files,
 public assets, approved boosters, and every top-level released date directory.
 It never publishes `/teacher/`, repository operations, planning files, or
