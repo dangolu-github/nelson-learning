@@ -4,6 +4,14 @@ The delivery and review context for Nelson's dated class materials, homework, an
 
 ## Language
 
+**Taught content**:
+Material explicitly reported or directly evidenced as used during a class. It defines the maximum content boundary for that class handout and learner review.
+_Avoid_: Prepared content, planned content
+
+**Summary evidence**:
+Notes, transcript extracts, or observations that support a post-class summary without proving that their wording or full content was taught.
+_Avoid_: Class handout source, taught content
+
 **Teacher Side**:
 The teacher-facing portal area for controlling file availability and reviewing Nelson's work.
 _Avoid_: Teacher end, admin backend

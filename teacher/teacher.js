@@ -146,7 +146,7 @@
     materials.className = "material-sections";
     const studentHref = resource.files[0]?.href
       ? new URL(resource.files[0].href, config.studentSite).href
-      : config.studentSite;
+      : "";
     const teacherHref = config.matchedTeacherFiles?.[resource.id];
     materials.append(
       sectionRow(

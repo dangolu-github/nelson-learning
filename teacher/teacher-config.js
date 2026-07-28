@@ -22,6 +22,10 @@ window.NELSON_TEACHER_PORTAL = {
   matchedTeacherFiles: {
     "class-3-change-continuation":
       "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=class3",
+    "class-4-passive-foundations":
+      "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=class4",
+    "future-function-first-writing":
+      "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=future-function-first",
   },
   homeworkByResource: {
     "class-3-change-continuation": [
@@ -36,6 +40,12 @@ window.NELSON_TEACHER_PORTAL = {
       {
         label: "Grammar",
         href: "2026-07-24/homework-grammar/",
+      },
+    ],
+    "class-4-passive-foundations": [
+      {
+        label: "Passive voice foundations",
+        href: "2026-07-27/homework-passive/",
       },
     ],
   },

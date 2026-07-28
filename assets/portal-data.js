@@ -1,5 +1,5 @@
 window.NELSON_PORTAL_DATA = {
-  updated: "2026-07-24",
+  updated: "2026-07-27",
   resources: [
     {
       id: "class-0-reading-to-writing",
@@ -90,6 +90,47 @@ window.NELSON_PORTAL_DATA = {
           href: "2026-07-24/",
         },
       ],
+      review: "",
+      reviewVisible: false,
+    },
+    {
+      id: "class-4-passive-foundations",
+      eyebrow: "Class 4",
+      date: "27 July 2026",
+      title: "Passive Voice Foundations",
+      skills: ["Grammar", "Reading"],
+      summary: "Starter, verb and receiver before active-to-passive rebuilding.",
+      guidance:
+        "Review Unit 42 A-B, then complete the 30 questions in order: sentence jobs, guided passive builds, and active-to-passive rewrites.",
+      evidence: "Passive voice foundations taught · 30-question homework assigned",
+      listed: true,
+      released: true,
+      guidanceVisible: true,
+      archived: false,
+      files: [
+        {
+          label: "Open class page",
+          href: "2026-07-27/",
+        },
+      ],
+      review:
+        "We learned to identify the starter, verb and receiver before building a passive sentence. Direct examples helped, but the active-to-passive rewrite was not yet stable, so the homework gives controlled practice before new passive tenses. We also prepared a method for the school English A task: compare two news articles about the same event, annotate the same categories in both, and plan a PETAL comparison before writing.",
+      reviewVisible: true,
+    },
+    {
+      id: "future-function-first-writing",
+      eyebrow: "Future planned unit",
+      date: "Undated",
+      title: "Choose the Job, Then Choose the Words",
+      skills: ["Writing"],
+      summary: "Prepared function-first writing practice.",
+      guidance: "",
+      evidence: "Prepared only · no date · not assigned or taught",
+      listed: false,
+      released: false,
+      guidanceVisible: false,
+      archived: false,
+      files: [],
       review: "",
       reviewVisible: false,
     },
