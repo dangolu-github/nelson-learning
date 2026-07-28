@@ -21,7 +21,9 @@ IELTS-standard B1-B2 English course.
 GitHub `main` is the canonical source for the Tencent CloudBase learner mirror.
 CloudBase runs `npm run build:cloudbase` and publishes `cloudbase-dist/`.
 The `nelson-learning-git` service is the Git-backed build surface. Automatic
-push deployment uses CI credentials stored only in GitHub repository secrets.
+deployment is enabled for every push to `main` through
+`.github/workflows/deploy-cloudbase.yml`. It uses an environment-bound
+CloudBase API Key stored only in GitHub repository secrets.
 That build uses an explicit learner-only allowlist: the portal root files,
 public assets, approved boosters, and every top-level released date directory.
 It never publishes `/teacher/`, repository operations, planning files, or
