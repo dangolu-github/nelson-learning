@@ -5,6 +5,6 @@
     "build:cloudbase": "node scripts/build-cloudbase-site.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=18"
   }
 }
