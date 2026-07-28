@@ -22,10 +22,10 @@ jobs:
       - name: Check out the verified commit
         uses: actions/checkout@v4
 
-      - name: Use Node.js 18
+      - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
 
       - name: Build the learner-only site
         run: npm run build:cloudbase
