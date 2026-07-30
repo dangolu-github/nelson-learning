@@ -88,14 +88,13 @@
     return link;
   }
 
-  function sectionRow({ label, status, tone, control, links, note }) {
+  function sectionRow({ label, status, tone, control, links }) {
     const row = document.createElement("section");
     row.className = "material-row";
     const copy = document.createElement("div");
     copy.className = "material-copy";
     addText(copy, "strong", "", label);
     addText(copy, "span", `material-state ${tone || ""}`, status);
-    if (note) addText(copy, "p", "material-note", note);
     const tools = document.createElement("div");
     tools.className = "material-tools";
     if (control) {
@@ -129,26 +128,16 @@
         ? `${homeworkLinks.length} student task${homeworkLinks.length === 1 ? "" : "s"}`
         : "No separate portal homework",
     );
-    if (homeworkLinks.length) {
-      addText(
-        copy,
-        "p",
-        "material-note",
-        "Student answers autosave and submissions appear in the private workspace in the same student layout.",
-      );
-    }
-
     const tools = document.createElement("div");
     tools.className = "material-tools";
     const controlLink = actionLink({
-      label: "Open controls and synced work",
+      label: "Homework controls",
       href: config.homeworkWorkspace,
       primary: true,
     });
     if (homeworkLinks.length && controlLink) {
       const controlWrap = document.createElement("div");
       controlWrap.className = "material-control material-control-link";
-      addText(controlWrap, "span", "", "Release");
       controlWrap.append(controlLink);
       tools.append(controlWrap);
     }
@@ -160,22 +149,17 @@
       task.className = "homework-task";
       const taskCopy = document.createElement("div");
       addText(taskCopy, "strong", "", item.label);
-      addText(
-        taskCopy,
-        "span",
-        "",
-        item.teacherHref
-          ? "Matched student and teacher versions"
-          : item.teacherNote || "Student version",
-      );
+      if (!item.teacherHref && item.teacherNote) {
+        addText(taskCopy, "span", "", item.teacherNote);
+      }
       const taskActions = document.createElement("div");
       taskActions.className = "material-actions";
       [
         {
-          label: "Preview student version",
+          label: "Student version",
           href: new URL(item.href, config.studentSite).href,
         },
-        { label: "Open teacher version", href: item.teacherHref },
+        { label: "Teacher version", href: item.teacherHref },
       ].forEach((action) => {
         const link = actionLink(action);
         if (link) taskActions.append(link);
@@ -236,9 +220,6 @@
         label: "Class handout",
         status: state.released ? "Student release on" : "Student release locked",
         tone: state.released ? "live" : "locked",
-        note: teacherHref
-          ? "Teacher version keeps the student order and adds answers, explanation, and annotation."
-          : "No matched teacher version is registered for this class.",
         control: labelledSelect(
           "Student release",
           "released",
@@ -247,9 +228,9 @@
           resource,
         ),
         links: [
-          { label: "Preview student version", href: studentHandoutHref },
-          { label: "Open teacher version", href: teacherHref },
-          { label: "Open/Check student page", href: studentHref },
+          { label: "Student version", href: studentHandoutHref },
+          { label: "Teacher version", href: teacherHref },
+          { label: "Student page", href: studentHref },
         ],
       }),
     );
@@ -267,8 +248,6 @@
             ? "Saved, not released"
             : "No saved summary",
         tone: reviewReady ? "live" : "locked",
-        note:
-          "Summary release is independent. Empty or hidden summary content stays absent from the student page.",
         control: labelledSelect(
           "Summary release",
           "reviewVisible",
@@ -277,7 +256,7 @@
           resource,
         ),
         links: [
-          { label: "Open student summary", href: reviewReady ? studentHref : "" },
+          { label: "Student summary", href: reviewReady ? studentHref : "" },
           { label: "Edit summary", href: config.controlSheet },
         ],
       }),
@@ -296,11 +275,7 @@
     );
     settings.append(settingsHeading, controls);
 
-    const footer = document.createElement("div");
-    footer.className = "release-card-footer";
-    addText(footer, "p", "evidence-copy", resource.evidence);
-
-    body.append(materials, settings, footer);
+    body.append(materials, settings);
     card.append(heading, body);
     return card;
   }
@@ -324,7 +299,7 @@
     });
 
     if (!releasedBoard.children.length) {
-      addText(releasedBoard, "p", "empty-state", "No class date is currently released.");
+      addText(releasedBoard, "p", "empty-state", "No released classes.");
     }
     if (!lockedBoard.children.length) {
       addText(lockedBoard, "p", "empty-state", "No future or locked class date.");
@@ -334,7 +309,7 @@
         archiveBoard,
         "p",
         "empty-state",
-        "Archived class dates will appear here with their original subsections.",
+        "No archived classes.",
       );
     }
     document.querySelector("#released-board-count").textContent =
@@ -373,15 +348,14 @@
       const copy = document.createElement("div");
       addText(copy, "p", "eyebrow", booster.status);
       addText(copy, "h3", "", booster.title);
-      addText(copy, "p", "booster-note", booster.note);
       const actions = document.createElement("div");
       actions.className = "material-actions";
       [
         {
-          label: "Open student booster",
+          label: "Student booster",
           href: new URL(booster.studentRoute, config.studentSite).href,
         },
-        { label: "Open private course book", href: booster.teacherHref },
+        { label: "Course book", href: booster.teacherHref },
       ].forEach((item) => {
         if (!item.href) return;
         const link = document.createElement("a");
@@ -461,16 +435,16 @@
         liveCommit: config.verifiedCommit,
         changes: plan,
         boundary:
-          "Publication request only. Update GitHub, verify production, then refresh Live State.",
+          "Publish through GitHub.",
       },
       null,
       2,
     );
     try {
       await navigator.clipboard.writeText(text);
-      status.textContent = "Change plan copied. Record it in the durable control sheet.";
+      status.textContent = "Change plan copied.";
     } catch {
-      status.textContent = "Copy was blocked. Open the durable control sheet.";
+      status.textContent = "Copy blocked.";
     }
   }
 
@@ -479,7 +453,7 @@
     localStorage.removeItem(draftKey);
     renderBoards();
     document.querySelector("#copy-status").textContent =
-      "Draft reset to the verified live state.";
+      "Draft reset.";
   }
 
   function bindLinks() {
@@ -559,18 +533,13 @@
   function renderPresence(result) {
     const count = Number(result?.activeViewerCount) || 0;
     const status = count > 0 ? "online" : "offline";
-    const noun = count === 1 ? "student device" : "student devices";
     document.querySelector("#active-viewer-count").textContent = String(count);
-    document.querySelector("#presence-detail").textContent =
-      `${count} ${noun} active in the last ${result.expirySeconds || 90} seconds. This teacher device is excluded.`;
     const chip = document.querySelector("#presence-status");
     chip.className = `presence-status ${status}`;
     chip.textContent = status === "online" ? "Student online" : "No student online";
   }
 
   function renderPresenceError() {
-    document.querySelector("#presence-detail").textContent =
-      "The live presence service is unavailable. This does not affect the student site.";
     const chip = document.querySelector("#presence-status");
     chip.className = "presence-status error";
     chip.textContent = "Unavailable";

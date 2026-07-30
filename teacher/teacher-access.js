@@ -43,15 +43,12 @@
     gate.innerHTML = `
       <section class="access-panel" aria-labelledby="teacher-access-title">
         <p class="access-wordmark">NELSON</p>
-        <p class="access-kicker">Teacher operations</p>
-        <h1 id="teacher-access-title">Open the teacher portal.</h1>
-        <p>Enter the established portal word for this course.</p>
+        <h1 id="teacher-access-title">Teacher portal</h1>
         <form class="access-form">
           <label for="teacher-portal-word">Portal word</label>
           <input id="teacher-portal-word" name="teacher-portal-word" type="password" autocomplete="current-password" required autofocus>
-          <small>This screen is a convenience gate. Protected records still require Google sign-in.</small>
           <p class="access-error" role="alert" hidden>That portal word is not correct.</p>
-          <button type="submit">Enter teacher portal</button>
+          <button type="submit">Open</button>
         </form>
       </section>`;
 
