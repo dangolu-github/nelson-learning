@@ -7,11 +7,11 @@
   <meta name="description" content="Nelson portal release controls">
   <title>Nelson Learning Portal — Teacher Side</title>
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="teacher.css?v=20260730-clarity-v1">
+  <link rel="stylesheet" href="teacher.css?v=20260730-clarity-v2">
   <script src="../assets/portal-data.js" defer></script>
-  <script src="teacher-config.js?v=20260730-clarity-v1" defer></script>
-  <script src="teacher-access.js?v=20260726a" defer></script>
-  <script src="teacher.js?v=20260730-clarity-v1" defer></script>
+  <script src="teacher-config.js?v=20260730-clarity-v2" defer></script>
+  <script src="teacher-access.js?v=20260730-clarity-v2" defer></script>
+  <script src="teacher.js?v=20260730-clarity-v2" defer></script>
 </head>
 <body>
   <main class="teacher-shell protected-page" hidden>
@@ -19,34 +19,33 @@
       <div>
         <p class="eyebrow">Nelson · IELTS/B2</p>
         <h1>Nelson Learning Portal — Teacher Side</h1>
-        <p class="hero-copy">Control student releases, open complete teacher versions, and review synchronized homework in one clear route.</p>
       </div>
       <div class="hero-actions">
-        <a class="primary-action" href="#" data-private-link="homeworkWorkspace" target="_blank" rel="noopener">Open private workspace</a>
-        <a class="quiet-action" href="#" data-private-link="controlSheet" target="_blank" rel="noopener">Open durable controls</a>
+        <a class="primary-action" href="#" data-private-link="homeworkWorkspace" target="_blank" rel="noopener">Teacher workspace</a>
+        <a class="quiet-action" href="#" data-private-link="controlSheet" target="_blank" rel="noopener">Release sheet</a>
         <button id="lock-teacher-portal" class="quiet-action" type="button">Lock portal</button>
       </div>
     </header>
 
     <nav class="quick-links" aria-label="Teacher workspaces">
       <a href="#" data-private-link="studentSite" target="_blank" rel="noopener">
-        <span>Student site</span><strong>Open live portal</strong>
+        <span>Student site</span><strong>Live portal</strong>
       </a>
       <a href="#" data-private-link="homeworkWorkspace" target="_blank" rel="noopener">
-        <span>Homework</span><strong>Student work & overall review</strong>
+        <span>Homework</span><strong>Work and review</strong>
       </a>
       <a href="#" data-private-link="courseTracker" target="_blank" rel="noopener">
-        <span>Course record</span><strong>Open tracker</strong>
+        <span>Course record</span><strong>Tracker</strong>
       </a>
       <a href="#" data-private-link="teacherMaterials" target="_blank" rel="noopener">
-        <span>Teacher files</span><strong>Open private folder</strong>
+        <span>Teacher files</span><strong>Private folder</strong>
       </a>
     </nav>
 
     <nav class="section-nav" aria-label="Teacher portal sections">
       <a href="#overview">Overview</a>
-      <a href="#class-publication">Class publication</a>
-      <a href="#skill-boosters">Skill boosters</a>
+      <a href="#class-publication">Classes</a>
+      <a href="#skill-boosters">Boosters</a>
       <a href="#archive">Archive</a>
     </nav>
 
@@ -54,7 +53,6 @@
       <div>
         <p class="eyebrow">Student site presence</p>
         <h2 id="presence-title"><span id="active-viewer-count">—</span> viewing now</h2>
-        <p id="presence-detail">Checking the student site…</p>
       </div>
       <span id="presence-status" class="presence-status checking" role="status" aria-live="polite">Checking</span>
     </section>
@@ -72,7 +70,6 @@
           <span class="section-toggle-copy">
             <span class="eyebrow">Publication</span>
             <span class="section-title">Class materials and releases</span>
-            <span class="section-description">Released classes and locked future classes stay separate.</span>
           </span>
           <span class="section-toggle-label" aria-hidden="true"></span>
         </h2>
@@ -81,23 +78,18 @@
         <div class="heading-actions">
           <span class="commit-chip"><small>Verified commit</small><strong id="verified-commit">Loading…</strong></span>
           <button id="reset-plan" class="quiet-action dark" type="button">Reset draft</button>
-          <button id="copy-plan" class="primary-action" type="button">Copy change plan</button>
+          <button id="copy-plan" class="primary-action" type="button">Copy plan</button>
         </div>
-        <p class="planning-note">
-          Handout access and class-summary release sit beside their matching
-          versions. Homework release, synchronized student work, answers, and
-          teacher review stay in the private workspace.
-        </p>
         <section class="release-group" aria-labelledby="released-title">
           <div class="group-heading">
-            <div><h3 id="released-title">Released class dates</h3><p>Student can open these class pages.</p></div>
+            <div><h3 id="released-title">Released classes</h3></div>
             <span id="released-board-count" class="group-count">0</span>
           </div>
           <div id="released-release-board" class="release-board scroll-window"></div>
         </section>
         <section class="release-group" aria-labelledby="locked-title">
           <div class="group-heading">
-            <div><h3 id="locked-title">Future or locked class dates</h3><p>Listed items can remain visible without opening their files.</p></div>
+            <div><h3 id="locked-title">Future or locked</h3></div>
             <span id="locked-board-count" class="group-count">0</span>
           </div>
           <div id="locked-release-board" class="release-board scroll-window"></div>
@@ -110,9 +102,7 @@
       <summary class="section-toggle-heading">
         <h2 class="section-summary">
           <span class="section-toggle-copy">
-            <span class="eyebrow">Reusable practice</span>
             <span class="section-title">Skill boosters</span>
-            <span class="section-description">Separate from dated class homework.</span>
           </span>
           <span class="section-toggle-label" aria-hidden="true"></span>
         </h2>
@@ -126,9 +116,7 @@
       <summary class="section-toggle-heading">
         <h2 class="section-summary">
           <span class="section-toggle-copy">
-            <span class="eyebrow">Filed by original class date</span>
             <span class="section-title">Archive</span>
-            <span class="section-description">Archived material keeps its Class handout, Homework, and Class summary subsections.</span>
           </span>
           <span class="section-toggle-label" aria-hidden="true"></span>
         </h2>
@@ -137,12 +125,6 @@
         <div id="archive-release-board" class="release-board scroll-window"></div>
       </div>
     </details>
-
-    <p class="privacy-note">
-      This GitHub page contains public-safe release information only. Teacher
-      versions, answers, comments, learner responses, and durable controls open
-      in owner-only Google workspaces.
-    </p>
   </main>
 </body>
 </html>

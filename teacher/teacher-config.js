@@ -51,7 +51,7 @@ window.NELSON_TEACHER_PORTAL = {
       {
         label: "Grammar Book Exercises",
         href: "2026-07-24/homework-grammar/",
-        teacherNote: "Manual-check book work. No generated teacher version.",
+        teacherNote: "Manual book work",
       },
     ],
     "class-4-passive-foundations": [
@@ -68,7 +68,6 @@ window.NELSON_TEACHER_PORTAL = {
       id: "grammar",
       title: "Grammar course book",
       status: "Released reference",
-      note: "Approved course reference. No separate Skill Booster homework is assigned.",
       studentRoute: "boosters/grammar/",
       teacherHref:
         "https://drive.google.com/file/d/1tL1Yhsu7cJ7BGFO83s1jjtUQsJ2y5o4r/view",
