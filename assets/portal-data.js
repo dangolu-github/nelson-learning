@@ -1,5 +1,5 @@
 window.NELSON_PORTAL_DATA = {
-  updated: "2026-07-27",
+  updated: "2026-07-30",
   resources: [
     {
       id: "class-0-reading-to-writing",
@@ -115,6 +115,30 @@ window.NELSON_PORTAL_DATA = {
       ],
       review:
         "We learned to identify the starter, verb and receiver before building a passive sentence. Direct examples helped, but the active-to-passive rewrite was not yet stable, so the homework gives controlled practice before new passive tenses. We also discussed future school literature preparation. Nelson should collect and send the complete list of the ten reading titles assigned by school so future lessons can be prepared from the correct texts and editions.",
+      reviewVisible: true,
+    },
+    {
+      id: "class-5-identity-passive",
+      eyebrow: "Class 5",
+      date: "29 July 2026",
+      title: "Identity, Evidence, and Passive Voice",
+      skills: ["Grammar", "Vocabulary", "Listening", "Writing"],
+      summary: "Passive voice, shared identity and evidence-based language.",
+      guidance:
+        "Review the class notes and vocabulary, then complete 15 passive-voice questions and one B1 diversity listening task.",
+      evidence: "Class content recorded · homework released",
+      listed: true,
+      released: true,
+      guidanceVisible: true,
+      archived: false,
+      files: [
+        {
+          label: "Open class page",
+          href: "2026-07-29/",
+        },
+      ],
+      review:
+        "We continued passive voice and discussed how shared identity can be formed through nationality, place, family background, language, values and experience. We also considered how repeated social-media messages can strengthen stereotypes or biased views. The key improvement focus is to use neutral language and support claims with relevant evidence.",
       reviewVisible: true,
     },
     {

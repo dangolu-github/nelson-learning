@@ -24,6 +24,8 @@ window.NELSON_TEACHER_PORTAL = {
       "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=class3",
     "class-4-passive-foundations":
       "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=class4",
+    "class-5-identity-passive":
+      "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=class5",
     "future-function-first-writing":
       "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=future-function-first",
   },
@@ -33,6 +35,7 @@ window.NELSON_TEACHER_PORTAL = {
     "class-2-change-takeaway-1": "2026-07-22/",
     "class-3-change-continuation": "2026-07-24/learning-handout.html",
     "class-4-passive-foundations": "2026-07-27/learning-handout.html",
+    "class-5-identity-passive": "2026-07-29/learning-handout.html",
   },
   homeworkByResource: {
     "class-3-change-continuation": [
@@ -60,6 +63,14 @@ window.NELSON_TEACHER_PORTAL = {
         href: "2026-07-27/homework-passive/",
         teacherHref:
           "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=homework&assignmentId=nelson-20260727-passive-foundations-30",
+      },
+    ],
+    "class-5-identity-passive": [
+      {
+        label: "Passive Voice and Diversity Listening",
+        href: "2026-07-29/homework-passive-listening/",
+        teacherHref:
+          "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=homework&assignmentId=nelson-20260729-passive-diversity-listening-22",
       },
     ],
   },

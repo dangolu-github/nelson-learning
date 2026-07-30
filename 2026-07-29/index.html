@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Class 5 · Identity, Evidence, and Passive Voice</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css">
+  <script src="../assets/portal-data.js" defer></script>
+  <script src="../assets/config.js?v=20260728-cn-post-v1" defer></script>
+  <script src="../assets/access-gate.js?v=20260728-cn-post-v1" defer></script>
+  <script src="../assets/presence.js?v=20260726a" defer></script>
+</head>
+<body>
+  <main class="class-page protected-page" hidden>
+    <nav class="class-toolbar">
+      <a href="../index.html">Back to portal</a>
+      <button type="button" onclick="window.print()">Save class page as PDF</button>
+    </nav>
+    <section class="class-hero">
+      <p class="eyebrow">Class 5 · 29 July 2026</p>
+      <h1>Identity, Evidence, and Passive Voice</h1>
+      <p>We continued passive voice and used neutral, evidence-based vocabulary to discuss shared identity and social-media bias.</p>
+    </section>
+    <section class="class-card">
+      <p class="eyebrow">Class handout</p>
+      <h2>Class Notes and Vocabulary</h2>
+      <p>Review the passive-voice route, the class notes image, two writing-topic ideas, and twelve key words with examples.</p>
+      <a class="open-button" href="learning-handout.html">Open learning handout</a>
+    </section>
+    <section class="class-card">
+      <p class="eyebrow">Homework</p>
+      <h2>Passive Voice and Diversity Listening</h2>
+      <p>Complete 15 passive-voice questions, then listen to one British Council B1 recording and answer the questions on the same page.</p>
+      <div class="homework-assignment-grid">
+        <a class="homework-assignment" href="homework-passive-listening/">
+          <span class="homework-number">01</span>
+          <p class="eyebrow">Grammar and listening</p>
+          <h3>Passive Voice + B1 Diversity Listening</h3>
+          <p>Your answers save on the page. Submit only when you have checked both sections.</p>
+          <strong>Open homework →</strong>
+        </a>
+      </div>
+    </section>
+    <section id="class-summary-card" class="class-card" hidden>
+      <p class="eyebrow">Class summary</p>
+      <h2>Class summary</h2>
+      <p id="class-summary-copy" class="review-copy"></p>
+    </section>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var resource = window.NELSON_PORTAL_DATA.resources.find(function (item) {
+        return item.id === "class-5-identity-passive";
+      });
+      if (resource && resource.reviewVisible && resource.review.trim()) {
+        document.querySelector("#class-summary-copy").textContent = resource.review;
+        document.querySelector("#class-summary-card").hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>
