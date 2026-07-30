@@ -77,24 +77,114 @@
     return wrapper;
   }
 
-  function sectionRow(label, status, links) {
-    const row = document.createElement("div");
+  function actionLink(item) {
+    if (!item?.href) return null;
+    const link = document.createElement("a");
+    link.href = item.href;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.textContent = item.label;
+    link.className = item.primary ? "material-action primary" : "material-action";
+    return link;
+  }
+
+  function sectionRow({ label, status, tone, control, links, note }) {
+    const row = document.createElement("section");
     row.className = "material-row";
     const copy = document.createElement("div");
+    copy.className = "material-copy";
     addText(copy, "strong", "", label);
-    addText(copy, "span", "", status);
+    addText(copy, "span", `material-state ${tone || ""}`, status);
+    if (note) addText(copy, "p", "material-note", note);
+    const tools = document.createElement("div");
+    tools.className = "material-tools";
+    if (control) {
+      const controlWrap = document.createElement("div");
+      controlWrap.className = "material-control";
+      controlWrap.append(control);
+      tools.append(controlWrap);
+    }
     const actions = document.createElement("div");
     actions.className = "material-actions";
     links.forEach((item) => {
-      if (!item?.href) return;
-      const link = document.createElement("a");
-      link.href = item.href;
-      link.target = "_blank";
-      link.rel = "noopener";
-      link.textContent = item.label;
-      actions.append(link);
+      const link = actionLink(item);
+      if (link) actions.append(link);
     });
-    row.append(copy, actions);
+    tools.append(actions);
+    row.append(copy, tools);
+    return row;
+  }
+
+  function homeworkSection(homeworkLinks) {
+    const row = document.createElement("section");
+    row.className = "material-row homework-material-row";
+    const copy = document.createElement("div");
+    copy.className = "material-copy";
+    addText(copy, "strong", "", "Homework");
+    addText(
+      copy,
+      "span",
+      `material-state ${homeworkLinks.length ? "live" : "muted"}`,
+      homeworkLinks.length
+        ? `${homeworkLinks.length} student task${homeworkLinks.length === 1 ? "" : "s"}`
+        : "No separate portal homework",
+    );
+    if (homeworkLinks.length) {
+      addText(
+        copy,
+        "p",
+        "material-note",
+        "Student answers autosave and submissions appear in the private workspace in the same student layout.",
+      );
+    }
+
+    const tools = document.createElement("div");
+    tools.className = "material-tools";
+    const controlLink = actionLink({
+      label: "Open controls and synced work",
+      href: config.homeworkWorkspace,
+      primary: true,
+    });
+    if (homeworkLinks.length && controlLink) {
+      const controlWrap = document.createElement("div");
+      controlWrap.className = "material-control material-control-link";
+      addText(controlWrap, "span", "", "Release");
+      controlWrap.append(controlLink);
+      tools.append(controlWrap);
+    }
+
+    const taskList = document.createElement("div");
+    taskList.className = "homework-task-list";
+    homeworkLinks.forEach((item) => {
+      const task = document.createElement("article");
+      task.className = "homework-task";
+      const taskCopy = document.createElement("div");
+      addText(taskCopy, "strong", "", item.label);
+      addText(
+        taskCopy,
+        "span",
+        "",
+        item.teacherHref
+          ? "Matched student and teacher versions"
+          : item.teacherNote || "Student version",
+      );
+      const taskActions = document.createElement("div");
+      taskActions.className = "material-actions";
+      [
+        {
+          label: "Preview student version",
+          href: new URL(item.href, config.studentSite).href,
+        },
+        { label: "Open teacher version", href: item.teacherHref },
+      ].forEach((action) => {
+        const link = actionLink(action);
+        if (link) taskActions.append(link);
+      });
+      task.append(taskCopy, taskActions);
+      taskList.append(task);
+    });
+    if (homeworkLinks.length) tools.append(taskList);
+    row.append(copy, tools);
     return row;
   }
 
@@ -132,63 +222,85 @@
     const body = document.createElement("div");
     body.className = "release-card-body";
 
-    const controls = document.createElement("div");
-    controls.className = "control-grid";
-    controls.append(
-      labelledSelect("List", "listed", [["true", "On"], ["false", "Off"]], state, resource),
-      labelledSelect("Access", "released", [["true", "Released"], ["false", "Locked"]], state, resource),
-      labelledSelect("Guidance", "guidanceVisible", [["true", "On"], ["false", "Off"]], state, resource),
-      labelledSelect("Placement", "archived", [["false", "Active"], ["true", "Archived"]], state, resource),
-      labelledSelect("Review", "reviewVisible", [["true", "On"], ["false", "Off"]], state, resource),
-    );
-
     const materials = document.createElement("div");
     materials.className = "material-sections";
     const studentHref = resource.files[0]?.href
       ? new URL(resource.files[0].href, config.studentSite).href
       : "";
+    const studentHandoutHref = config.studentHandoutsByResource?.[resource.id]
+      ? new URL(config.studentHandoutsByResource[resource.id], config.studentSite).href
+      : studentHref;
     const teacherHref = config.matchedTeacherFiles?.[resource.id];
     materials.append(
-      sectionRow(
-        "Class handout",
-        teacherHref ? "Matched learner and teacher routes" : "Student class route",
-        [
-          { label: "Student version", href: studentHref },
-          { label: "Matched teacher version", href: teacherHref },
+      sectionRow({
+        label: "Class handout",
+        status: state.released ? "Student release on" : "Student release locked",
+        tone: state.released ? "live" : "locked",
+        note: teacherHref
+          ? "Teacher version keeps the student order and adds answers, explanation, and annotation."
+          : "No matched teacher version is registered for this class.",
+        control: labelledSelect(
+          "Student release",
+          "released",
+          [["true", "Released"], ["false", "Locked"]],
+          state,
+          resource,
+        ),
+        links: [
+          { label: "Preview student version", href: studentHandoutHref },
+          { label: "Open teacher version", href: teacherHref },
+          { label: "Open/Check student page", href: studentHref },
         ],
-      ),
+      }),
     );
 
     const homeworkLinks = config.homeworkByResource?.[resource.id] || [];
-    materials.append(
-      sectionRow(
-        "Homework",
-        homeworkLinks.length ? `${homeworkLinks.length} portal task${homeworkLinks.length === 1 ? "" : "s"}` : "No separate portal homework",
-        homeworkLinks.map((item) => ({
-          label: item.label,
-          href: new URL(item.href, config.studentSite).href,
-        })).concat(
-          homeworkLinks.length
-            ? [{ label: "Teacher controls", href: config.homeworkWorkspace }]
-            : [],
-        ),
-      ),
-    );
+    materials.append(homeworkSection(homeworkLinks));
 
     const reviewReady = state.reviewVisible && resource.review.trim().length > 0;
     materials.append(
-      sectionRow(
-        "Class summary",
-        reviewReady ? "Visible on the student class page" : "Hidden",
-        reviewReady ? [{ label: "Open class page", href: studentHref }] : [],
-      ),
+      sectionRow({
+        label: "Class summary",
+        status: reviewReady
+          ? "Released on student class page"
+          : resource.review.trim()
+            ? "Saved, not released"
+            : "No saved summary",
+        tone: reviewReady ? "live" : "locked",
+        note:
+          "Summary release is independent. Empty or hidden summary content stays absent from the student page.",
+        control: labelledSelect(
+          "Summary release",
+          "reviewVisible",
+          [["true", "Released"], ["false", "Hidden"]],
+          state,
+          resource,
+        ),
+        links: [
+          { label: "Open student summary", href: reviewReady ? studentHref : "" },
+          { label: "Edit summary", href: config.controlSheet },
+        ],
+      }),
     );
+
+    const settings = document.createElement("details");
+    settings.className = "class-settings";
+    const settingsHeading = document.createElement("summary");
+    settingsHeading.textContent = "Class entry settings";
+    const controls = document.createElement("div");
+    controls.className = "control-grid";
+    controls.append(
+      labelledSelect("List on portal", "listed", [["true", "On"], ["false", "Off"]], state, resource),
+      labelledSelect("Show guidance", "guidanceVisible", [["true", "On"], ["false", "Off"]], state, resource),
+      labelledSelect("Placement", "archived", [["false", "Active"], ["true", "Archived"]], state, resource),
+    );
+    settings.append(settingsHeading, controls);
 
     const footer = document.createElement("div");
     footer.className = "release-card-footer";
     addText(footer, "p", "evidence-copy", resource.evidence);
 
-    body.append(controls, materials, footer);
+    body.append(materials, settings, footer);
     card.append(heading, body);
     return card;
   }
@@ -201,7 +313,7 @@
     lockedBoard.replaceChildren();
     archiveBoard.replaceChildren();
 
-    data.resources.forEach((resource) => {
+    [...data.resources].reverse().forEach((resource) => {
       const state = resolvedState(resource);
       const destination = state.archived
         ? archiveBoard
