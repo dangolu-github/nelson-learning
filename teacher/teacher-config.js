@@ -27,25 +27,39 @@ window.NELSON_TEACHER_PORTAL = {
     "future-function-first-writing":
       "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=future-function-first",
   },
+  studentHandoutsByResource: {
+    "class-0-reading-to-writing": "2026-07-13/learning-handout.html",
+    "class-1-writing-reuse": "2026-07-13/learning-handout.html",
+    "class-2-change-takeaway-1": "2026-07-22/",
+    "class-3-change-continuation": "2026-07-24/learning-handout.html",
+    "class-4-passive-foundations": "2026-07-27/learning-handout.html",
+  },
   homeworkByResource: {
     "class-3-change-continuation": [
       {
-        label: "Reading",
+        label: "B1 Reading: Two Online Texts",
         href: "2026-07-24/homework-reading/",
+        teacherHref:
+          "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=homework&assignmentId=nelson-20260724-reading-two-online-texts",
       },
       {
-        label: "Trend practice",
+        label: "Describe Change Clearly",
         href: "2026-07-24/homework-trends/",
+        teacherHref:
+          "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=homework&assignmentId=nelson-20260724-trend-description-20",
       },
       {
-        label: "Grammar",
+        label: "Grammar Book Exercises",
         href: "2026-07-24/homework-grammar/",
+        teacherNote: "Manual-check book work. No generated teacher version.",
       },
     ],
     "class-4-passive-foundations": [
       {
-        label: "Passive voice foundations",
+        label: "Passive Voice Foundations",
         href: "2026-07-27/homework-passive/",
+        teacherHref:
+          "https://script.google.com/macros/s/AKfycbxpZ5N9gnx9Jl7-kAjAuzHhF9JUf_dG4v3yMdzVYFaY5CPP6jyD0vD3p8l6ftRLPWuw/exec?view=homework&assignmentId=nelson-20260727-passive-foundations-30",
       },
     ],
   },
