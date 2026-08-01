@@ -1,5 +1,5 @@
 window.NELSON_PORTAL_DATA = {
-  updated: "2026-07-30",
+  updated: "2026-08-01",
   resources: [
     {
       id: "class-0-reading-to-writing",
@@ -139,6 +139,30 @@ window.NELSON_PORTAL_DATA = {
       ],
       review:
         "We continued passive voice and discussed how shared identity can be formed through nationality, place, family background, language, values and experience. We also considered how repeated social-media messages can strengthen stereotypes or biased views. The key improvement focus is to use neutral language and support claims with relevant evidence.",
+      reviewVisible: true,
+    },
+    {
+      id: "class-6-passive-review",
+      eyebrow: "Class 6",
+      date: "31 July 2026",
+      title: "Passive Voice Review",
+      skills: ["Grammar"],
+      summary: "Choose passive forms from time clues and rewrite future sentences.",
+      guidance:
+        "Review receiver → time → be → past participle, then continue as much unfinished Class 3 homework as you can.",
+      evidence: "Controlled class review recorded · Class 3 homework continuation assigned",
+      listed: true,
+      released: true,
+      guidanceVisible: true,
+      archived: false,
+      files: [
+        {
+          label: "Open class page",
+          href: "2026-07-31/",
+        },
+      ],
+      review:
+        "We reviewed active and passive forms across past, present-perfect and future time. You were willing to try the choices and could use time expressions as a clue when prompted. Next, name the receiver first, keep the time, and then build be + past participle before writing the full passive sentence. Continue unfinished Class 3 homework as far as you can, starting from the Class 3 homework page.",
       reviewVisible: true,
     },
     {
