@@ -2,7 +2,8 @@
   "name": "nelson-learning-portal",
   "private": true,
   "scripts": {
-    "build:cloudbase": "node scripts/build-cloudbase-site.mjs"
+    "build:cloudbase": "npm run validate:homework && node scripts/build-cloudbase-site.mjs",
+    "validate:homework": "node scripts/validate-homework-submit.mjs"
   },
   "engines": {
     "node": ">=18"

@@ -1,5 +1,5 @@
 window.NELSON_PORTAL_DATA = {
-  updated: "2026-08-01",
+  updated: "2026-08-04",
   resources: [
     {
       id: "class-0-reading-to-writing",

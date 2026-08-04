@@ -7,7 +7,7 @@
   <title>B1 Reading Homework · Nelson English Learning</title>
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../../assets/site.css">
-  <link rel="stylesheet" href="../../assets/homework.css?v=20260728-submit-visible-v1">
+  <link rel="stylesheet" href="../../assets/homework.css?v=20260804-submit-always-v2">
   <script src="../../assets/config.js?v=20260728-cn-post-v1" defer></script>
   <script src="../../assets/access-gate.js?v=20260728-cn-post-v1" defer></script>
   <script src="../../assets/presence.js?v=20260726a" defer></script>
@@ -18,6 +18,17 @@
       <div><a href="../">24 July class</a> <a href="../../index.html">Portal home</a></div>
       <button type="button" onclick="window.print()">Save as PDF / Print</button>
     </nav>
+
+    <section class="homework-status" aria-live="polite">
+      <div class="save-state">
+        <strong id="homework-progress">0 of 44 answered</strong>
+        <small id="homework-save">Saved on this device</small>
+      </div>
+      <div class="homework-actions">
+        <button type="button" id="homework-clear" disabled>Clear local draft</button>
+        <button type="button" class="primary" id="homework-submit" disabled>Submit homework</button>
+      </div>
+    </section>
 
     <article class="homework-document">
       <p class="eyebrow">Homework 1 · B1 Reading</p>
@@ -178,6 +189,6 @@
       layoutVersion: "20260724-v1"
     };
   </script>
-  <script src="../../assets/homework.js?v=20260728-submit-visible-v1" defer></script>
+  <script src="../../assets/homework.js?v=20260804-submit-always-v2" defer></script>
 </body>
 </html>

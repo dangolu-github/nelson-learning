@@ -335,6 +335,11 @@
   color: #fff;
 }
 
+.homework-actions button:disabled {
+  cursor: wait;
+  opacity: .68;
+}
+
 .submission-message {
   margin: 18px 0 0;
   padding: 15px 17px;

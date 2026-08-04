@@ -3,11 +3,13 @@
 
   const page = window.NELSON_HOMEWORK_CONFIG;
   const portal = window.NELSON_PORTAL_CONFIG;
-  if (!page || !portal?.serviceEndpoint) return;
-
   enhanceChoiceControls();
   const fields = Array.from(document.querySelectorAll("[data-response-id]"));
   if (!fields.length) return;
+  if (!page || !portal?.serviceEndpoint) {
+    markSubmissionUnavailable();
+    return;
+  }
 
   const storageKey = `nelson-homework:${page.assignmentId}`;
   let state = loadState();
@@ -94,23 +96,46 @@
   }
 
   function installStatus() {
-    const panel = document.createElement("section");
-    panel.className = "homework-status";
-    panel.setAttribute("aria-live", "polite");
-    panel.innerHTML = `
-      <div class="save-state">
-        <strong id="homework-progress">0 of ${fields.length} answered</strong>
-        <small id="homework-save">Saved on this device</small>
-      </div>
-      <div class="homework-actions">
-        <button type="button" id="homework-clear">Clear local draft</button>
-        <button type="button" class="primary" id="homework-submit">Submit homework</button>
-      </div>`;
-    const shell = document.querySelector(".homework-shell");
-    const documentPanel = shell.querySelector(".homework-document");
-    shell.insertBefore(panel, documentPanel);
-    panel.querySelector("#homework-clear").addEventListener("click", clearDraft);
-    panel.querySelector("#homework-submit").addEventListener("click", submitHomework);
+    let panel = document.querySelector(".homework-status");
+    if (!panel) {
+      panel = document.createElement("section");
+      panel.className = "homework-status";
+      panel.setAttribute("aria-live", "polite");
+      panel.innerHTML = `
+        <div class="save-state">
+          <strong id="homework-progress">0 of ${fields.length} answered</strong>
+          <small id="homework-save">Saved on this device</small>
+        </div>
+        <div class="homework-actions">
+          <button type="button" id="homework-clear">Clear local draft</button>
+          <button type="button" class="primary" id="homework-submit">Submit homework</button>
+        </div>`;
+      const shell = document.querySelector(".homework-shell");
+      const documentPanel = shell.querySelector(".homework-document");
+      shell.insertBefore(panel, documentPanel);
+    }
+
+    panel.querySelector("#homework-progress").textContent =
+      `0 of ${fields.length} answered`;
+    const clear = panel.querySelector("#homework-clear");
+    const submit = panel.querySelector("#homework-submit");
+    clear.disabled = false;
+    submit.disabled = false;
+    clear.addEventListener("click", clearDraft);
+    submit.addEventListener("click", submitHomework);
+    panel.dataset.homeworkReady = "true";
+  }
+
+  function markSubmissionUnavailable() {
+    const panel = document.querySelector(".homework-status");
+    if (!panel) return;
+    const progress = panel.querySelector("#homework-progress");
+    const save = panel.querySelector("#homework-save");
+    if (progress) progress.textContent = `0 of ${fields.length} answered`;
+    if (save) save.textContent = "Answers cannot be submitted right now. Reload and try again.";
+    panel.querySelectorAll("button").forEach((button) => {
+      button.disabled = true;
+    });
   }
 
   function updateStatus() {
