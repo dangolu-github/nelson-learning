@@ -166,6 +166,30 @@ window.NELSON_PORTAL_DATA = {
       reviewVisible: true,
     },
     {
+      id: "class-7-sentence-roles-passive",
+      eyebrow: "Class 7",
+      date: "3 August 2026",
+      title: "Sentence Roles and Passive Voice",
+      skills: ["Grammar"],
+      summary: "Meaning roles, grammar positions, active/passive patterns, and time clues.",
+      guidance:
+        "Review starter and receiver first, keep the original time, then build be + past participle. Finish the unfinished Class 3 homework.",
+      evidence: "Class 5 grammar reviewed · sentence roles taught · Class 3 homework continued",
+      listed: true,
+      released: true,
+      guidanceVisible: true,
+      archived: false,
+      files: [
+        {
+          label: "Open class page",
+          href: "2026-08-03/",
+        },
+      ],
+      review:
+        "We reviewed the grammar section of the Class 5 homework and separated meaning roles from grammar positions. You were willing to keep trying and could identify some basic sentence parts and notice errors when prompted. Next, name the starter and receiver, keep the original time, and then build be + past participle. Finish the unfinished Class 3 homework from the Class 3 page.",
+      reviewVisible: true,
+    },
+    {
       id: "future-function-first-writing",
       eyebrow: "Future planned unit",
       date: "Undated",

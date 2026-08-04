@@ -36,6 +36,7 @@ window.NELSON_TEACHER_PORTAL = {
     "class-3-change-continuation": "2026-07-24/learning-handout.html",
     "class-4-passive-foundations": "2026-07-27/learning-handout.html",
     "class-5-identity-passive": "2026-07-29/learning-handout.html",
+    "class-7-sentence-roles-passive": "2026-08-03/learning-handout.html",
   },
   homeworkByResource: {
     "class-3-change-continuation": [
