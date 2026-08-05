@@ -22,10 +22,6 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install function dependencies
-        working-directory: functions/nelson-grammar-book-link
-        run: npm ci --omit=dev
-
       - name: Install the pinned CloudBase CLI
         run: npm install --global @cloudbase/cli@3.6.4
 
@@ -45,7 +41,7 @@ jobs:
           --httpFn
           --path /nelson-grammar-book
           --runtime Nodejs18.15
-          --deployMode cos
+          --deployMode zip
           --force
           --yes
           --json
