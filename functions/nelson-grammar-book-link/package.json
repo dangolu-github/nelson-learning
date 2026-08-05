@@ -1,0 +1,16 @@
+{
+  "name": "nelson-grammar-book-link",
+  "version": "1.0.0",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js"
+  },
+  "dependencies": {
+    "@cloudbase/node-sdk": "3.18.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nelson book upload</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  <script src="../assets/config.js" defer></script>
+  <script src="../assets/access-gate.js" defer></script>
+  <style>
+    main { max-width: 720px; margin: 4rem auto; padding: 1.5rem; }
+    .upload-panel { display: grid; gap: 1rem; }
+    input, button { font: inherit; }
+    output { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <main class="protected-page" hidden>
+    <section class="upload-panel">
+      <h1>Protected grammar book upload</h1>
+      <p>This private operations page accepts only the approved 346-page PDF.</p>
+      <input id="book" type="file" accept="application/pdf">
+      <button id="upload" type="button">Upload approved book</button>
+      <output id="status" role="status">Waiting for the approved file.</output>
+    </section>
+  </main>
+  <script>
+    (() => {
+      "use strict";
+      const endpoint = "https://nelson-learning-d9fqrndb7046a35a.ap-shanghai.app.tcloudbase.com/nelson-grammar-book";
+      const expectedHash = "dddca2933960e7aca6599e76551d9965c3a55ecb8d888fd8c883e61e442f9593";
+      const expectedSize = 6686902;
+      const status = document.querySelector("#status");
+      const button = document.querySelector("#upload");
+
+      const hex = (buffer) => Array.from(new Uint8Array(buffer))
+        .map((byte) => byte.toString(16).padStart(2, "0")).join("");
+
+      async function call(action, extra = {}) {
+        const accessToken = await window.NelsonPortalAccess.ready;
+        const response = await fetch(endpoint, {
+          method: "POST",
+          cache: "no-store",
+          credentials: "omit",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action, accessToken, ...extra }),
+        });
+        const result = await response.json();
+        if (!response.ok || !result.ok) throw new Error(result.error || "Request failed.");
+        return result;
+      }
+
+      button.addEventListener("click", async () => {
+        const file = document.querySelector("#book").files[0];
+        if (!file) return;
+        button.disabled = true;
+        try {
+          status.textContent = "Checking the approved PDF…";
+          const sha256 = hex(await crypto.subtle.digest("SHA-256", await file.arrayBuffer()));
+          if (file.size !== expectedSize || sha256 !== expectedHash) {
+            throw new Error("This is not the approved portal copy of the book.");
+          }
+          status.textContent = "Preparing the private Tencent upload…";
+          const { upload } = await call("prepareGrammarBookUpload", { sha256, size: file.size });
+          const response = await fetch(upload.url, {
+            method: "PUT",
+            headers: {
+              Signature: upload.authorization,
+              authorization: upload.authorization,
+              "x-cos-security-token": upload.token,
+              "x-cos-meta-fileid": upload.cosFileId,
+              key: upload.key,
+            },
+            body: file,
+          });
+          if (!response.ok) throw new Error("Tencent did not accept the upload.");
+          const result = await call("getGrammarBookStatus");
+          if (!result.exists || result.size !== expectedSize) {
+            throw new Error("The uploaded file could not be verified.");
+          }
+          status.textContent = "Upload verified: the full private book is stored in Tencent Cloud.";
+        } catch (error) {
+          status.textContent = error.message || "Upload failed.";
+        } finally {
+          button.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
