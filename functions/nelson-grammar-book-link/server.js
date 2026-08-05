@@ -20,8 +20,8 @@ const expectedSha256 =
 const linkTtlSeconds = 600;
 const maxBodyBytes = 32 * 1024;
 
-const envId = tcb.getCurrentEnv();
-const app = tcb.init({ env: envId });
+const envId = "nelson-learning-d9fqrndb7046a35a";
+const app = tcb.init({ env: tcb.SYMBOL_CURRENT_ENV });
 const fileId = `cloud://${envId}.${bucketId}/${objectKey}`;
 
 function headers(origin) {
