@@ -35,9 +35,8 @@ jobs:
       - name: Deploy the protected HTTP function
         working-directory: functions/nelson-grammar-book-link
         run: >-
-          tcb fn code update nelson-grammar-book-link
+          printf '\n' | tcb fn code update nelson-grammar-book-link
           --env-id "${{ secrets.TCB_ENV_ID }}"
           --dir .
           --deployMode zip
-          --yes
           --json
