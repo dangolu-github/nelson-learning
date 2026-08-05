@@ -46,4 +46,5 @@ jobs:
           --runtime Nodejs18.15
           --deployMode cos
           --force
+          --yes
           --json
