@@ -37,7 +37,7 @@
         .map((byte) => byte.toString(16).padStart(2, "0")).join("");
 
       async function call(action, extra = {}) {
-        const accessToken = await window.NelsonPortalAccess.ready;
+        const accessToken = window.NelsonPortalAccess.getToken();
         const response = await fetch(endpoint, {
           method: "POST",
           cache: "no-store",
