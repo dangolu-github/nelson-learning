@@ -39,4 +39,5 @@ jobs:
           --env-id "${{ secrets.TCB_ENV_ID }}"
           --dir .
           --deployMode zip
+          --yes
           --json
