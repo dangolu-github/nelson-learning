@@ -1,6 +1,8 @@
 "use strict";
 
 const http = require("node:http");
+const crypto = require("node:crypto");
+const zlib = require("node:zlib");
 const tcb = require("@cloudbase/node-sdk");
 
 const port = Number(process.env.PORT || 9000);
@@ -19,6 +21,7 @@ const expectedSha256 =
   "dddca2933960e7aca6599e76551d9965c3a55ecb8d888fd8c883e61e442f9593";
 const linkTtlSeconds = 600;
 const maxBodyBytes = 32 * 1024;
+const maxCompressedBookBytes = 5 * 1024 * 1024;
 
 const envId = "nelson-learning-d9fqrndb7046a35a";
 const app = tcb.init({ env: tcb.SYMBOL_CURRENT_ENV });
@@ -57,6 +60,36 @@ async function readJson(request) {
   } catch {
     throw Object.assign(new Error(), { status: 400 });
   }
+}
+
+async function readBuffer(request, limit) {
+  const chunks = [];
+  let total = 0;
+  for await (const chunk of request) {
+    total += chunk.length;
+    if (total > limit) throw Object.assign(new Error(), { status: 413 });
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
+async function handleTemporaryBookUpload(request, response) {
+  if (
+    request.headers["x-book-sha256"] !== expectedSha256 ||
+    request.headers["x-book-encoding"] !== "gzip"
+  ) {
+    send(response, 403, { ok: false, error: "Upload proof is required." });
+    return;
+  }
+  const compressed = await readBuffer(request, maxCompressedBookBytes);
+  const fileContent = zlib.gunzipSync(compressed, { maxOutputLength: expectedSize });
+  const sha256 = crypto.createHash("sha256").update(fileContent).digest("hex");
+  if (fileContent.length !== expectedSize || sha256 !== expectedSha256) {
+    send(response, 400, { ok: false, error: "This is not the approved book." });
+    return;
+  }
+  await app.uploadFile({ cloudPath: objectKey, fileContent });
+  send(response, 200, { ok: true, size: fileContent.length, sha256 });
 }
 
 async function validPortalToken(accessToken) {
@@ -167,6 +200,10 @@ const server = http.createServer(async (request, response) => {
     }
     if (request.method === "POST") {
       await handlePost(request, response, origin);
+      return;
+    }
+    if (request.method === "PUT") {
+      await handleTemporaryBookUpload(request, response);
       return;
     }
     send(response, 405, { ok: false, error: "Method not allowed." }, origin);
