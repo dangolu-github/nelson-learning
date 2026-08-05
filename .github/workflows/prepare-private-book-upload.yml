@@ -19,9 +19,7 @@ jobs:
           node-version: "20"
 
       - name: Install private storage tools
-        run: |
-          npm install --global @cloudbase/cli@3.6.4
-          npm install --no-save cos-nodejs-sdk-v5@2.15.4
+        run: npm install --global @cloudbase/cli@3.6.4
 
       - name: Authenticate to the Nelson CloudBase environment
         run: >-
@@ -30,37 +28,31 @@ jobs:
           --env-id "${{ secrets.TCB_ENV_ID }}"
           --json
 
-      - name: Create a short-lived private upload URL
+      - name: Package short-lived private upload credentials
         run: |
           AUTH_FILE="$(find "$HOME/.config/.cloudbase/projects" -name auth.json -print -quit)"
           test -n "$AUTH_FILE"
           node - "$AUTH_FILE" <<'NODE'
           const fs = require("node:fs");
-          const COS = require("cos-nodejs-sdk-v5");
           const auth = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
           const credential = auth.credential || auth;
           if (!credential.secretId || !credential.secretKey || !credential.token) {
             throw new Error("Temporary CloudBase credentials are unavailable.");
           }
-          const cos = new COS({
-            SecretId: credential.secretId,
-            SecretKey: credential.secretKey,
-            SecurityToken: credential.token,
-          });
-          const url = cos.getObjectUrl({
-            Bucket: "6e65-nelson-learning-d9fqrndb7046a35a-1308268428",
-            Region: "ap-shanghai",
-            Key: "nelson-english-grammar-in-use.pdf",
-            Method: "PUT",
-            Sign: true,
-            Expires: 3600,
-          });
-          fs.writeFileSync("signed-upload-url.txt", url, { mode: 0o600 });
+          fs.writeFileSync("temporary-cos-credentials.json", JSON.stringify({
+            secretId: credential.secretId,
+            secretKey: credential.secretKey,
+            token: credential.token,
+            expiresAt: credential.accessTokenExpired,
+            bucket: "6e65-nelson-learning-d9fqrndb7046a35a-1308268428",
+            region: "ap-shanghai",
+            key: "nelson-english-grammar-in-use.pdf",
+          }), { mode: 0o600 });
           NODE
 
       - uses: actions/upload-artifact@v4
         with:
-          name: private-grammar-book-upload-url
-          path: signed-upload-url.txt
+          name: temporary-private-cos-credentials
+          path: temporary-cos-credentials.json
           if-no-files-found: error
           retention-days: 1
