@@ -37,10 +37,11 @@ jobs:
           --json
 
       - name: Deploy the protected HTTP function
+        working-directory: functions/nelson-grammar-book-link
         run: >-
           tcb fn deploy nelson-grammar-book-link
           --env-id "${{ secrets.TCB_ENV_ID }}"
-          --dir functions/nelson-grammar-book-link
+          --dir .
           --httpFn
           --path /nelson-grammar-book
           --runtime Nodejs18.15
