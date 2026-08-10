@@ -1,5 +1,5 @@
 window.NELSON_PORTAL_DATA = {
-  updated: "2026-08-04",
+  updated: "2026-08-10",
   resources: [
     {
       id: "class-0-reading-to-writing",
@@ -187,6 +187,30 @@ window.NELSON_PORTAL_DATA = {
       ],
       review:
         "We reviewed the grammar section of the Class 5 homework and separated meaning roles from grammar positions. You were willing to keep trying and could identify some basic sentence parts and notice errors when prompted. Next, name the starter and receiver, keep the original time, and then build be + past participle. Finish the unfinished Class 3 homework from the Class 3 page.",
+      reviewVisible: true,
+    },
+    {
+      id: "class-8-irregular-fiction-genre",
+      eyebrow: "Class 8",
+      date: "5 August 2026",
+      title: "Irregular Verbs, Fiction, and Genre",
+      skills: ["Grammar", "Vocabulary", "Writing"],
+      summary: "Irregular verb forms and key literature and film concepts.",
+      guidance:
+        "Review each irregular verb as a three-part set, then explain fiction, non-fiction, genre, and adaptation with one example each. Finish the unfinished Class 3 homework.",
+      evidence: "Guided verb and vocabulary review · Class 3 homework continued",
+      listed: true,
+      released: true,
+      guidanceVisible: true,
+      archived: false,
+      files: [
+        {
+          label: "Open class page",
+          href: "2026-08-05/",
+        },
+      ],
+      review:
+        "We reviewed irregular verbs through meaning, pronunciation, past forms and past participles, including begin–began–begun and buy–bought–bought. We also clarified beat, burst and explode, then discussed fiction, non-fiction, genre, adaptation and examples from literature and film. You needed prompting for some verb forms and definitions, so the next step is to retrieve each three-part verb set and explain each concept with one clear example. Finish the unfinished Class 3 homework from the Class 3 page.",
       reviewVisible: true,
     },
     {
