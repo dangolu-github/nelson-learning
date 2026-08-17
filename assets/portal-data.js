@@ -269,8 +269,8 @@ window.NELSON_PORTAL_DATA = {
       skills: ["Grammar", "Writing", "School English"],
       summary: "Grammar Book completion through Unit 3 and the opening narration concept.",
       guidance:
-        "Review the difference between narration, a narrative and a narrator. The later Build a Scene models and practice remain for a future class. No new portal homework was recorded.",
-      evidence: "Previous grammar practice completed · narration concept introduced",
+        "Review the difference between narration, a narrative and a narrator. Homework: finish Grammar Book Unit 4, then choose one of the two Creative Writing tasks on page 6 of the school summer homework and make a serious attempt to finish it.",
+      evidence: "Previous grammar practice completed · narration introduced · two homework tasks assigned",
       listed: true,
       released: true,
       guidanceVisible: true,
@@ -282,7 +282,7 @@ window.NELSON_PORTAL_DATA = {
         },
       ],
       review:
-        "We finished the previous Grammar Book practice through Unit 3. We then began the creative-writing unit using Build a Scene together with the school Creative Writing material. We clarified that narration is the act or method of telling a story, a narrative is the story being told, and a narrator is the voice or person telling it. This was an introduction only: the later models, writing practice and independent scene work remain for future classes. No new portal homework was recorded.",
+        "We finished the previous Grammar Book practice through Unit 3. We then began the creative-writing unit using Build a Scene together with the school Creative Writing material. We clarified that narration is the act or method of telling a story, a narrative is the story being told, and a narrator is the voice or person telling it. This was an introduction only: the later Build a Scene models and CW01–CW16 remain prepared for future classes. Homework is to finish Grammar Book Unit 4 and choose one of the two Creative Writing tasks on page 6 of the school summer homework, making a serious attempt to finish it. These two tasks are assigned; submission, completion and checking are not yet recorded.",
       reviewVisible: true,
     },
     {
