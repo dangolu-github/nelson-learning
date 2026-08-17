@@ -1,5 +1,5 @@
 window.NELSON_PORTAL_DATA = {
-  updated: "2026-08-10",
+  updated: "2026-08-17",
   resources: [
     {
       id: "class-0-reading-to-writing",
@@ -211,6 +211,30 @@ window.NELSON_PORTAL_DATA = {
       ],
       review:
         "We reviewed irregular verbs through meaning, pronunciation, past forms and past participles, including begin–began–begun and buy–bought–bought. We also clarified beat, burst and explode, then discussed fiction, non-fiction, genre, adaptation and examples from literature and film. You needed prompting for some verb forms and definitions, so the next step is to retrieve each three-part verb set and explain each concept with one clear example. Finish the unfinished Class 3 homework from the Class 3 page.",
+      reviewVisible: true,
+    },
+    {
+      id: "class-9-weather-present-tenses",
+      eyebrow: "Class 9",
+      date: "10 August 2026",
+      title: "Extreme Weather and Present Tenses",
+      skills: ["Vocabulary", "Grammar", "Speaking"],
+      summary: "Extreme-weather vocabulary and three present-tense uses.",
+      guidance:
+        "Review the weather words, choose each tense from its meaning, and compare always + present simple with be always + -ing. No new homework was recorded.",
+      evidence: "Class discussion and guided Grammar Book practice completed",
+      listed: true,
+      released: true,
+      guidanceVisible: true,
+      archived: false,
+      files: [
+        {
+          label: "Open class page",
+          href: "2026-08-10/",
+        },
+      ],
+      review:
+        "We discussed natural disasters and extreme weather, including humidity, typhoon, snowstorm, blizzard and avalanche. We reviewed the present simple, present continuous and present perfect, completed the relevant Grammar Book practice, and compared a neutral habit such as I always check the forecast with repeated behaviour such as He is always leaving the window open. The next priorities are to expand weather vocabulary, choose tenses from real-life situations and give more focused weather answers. These priorities are not new homework.",
       reviewVisible: true,
     },
     {
