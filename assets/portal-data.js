@@ -238,6 +238,30 @@ window.NELSON_PORTAL_DATA = {
       reviewVisible: true,
     },
     {
+      id: "class-10-function-comparative",
+      eyebrow: "Class 10",
+      date: "12 August 2026",
+      title: "Function-First Writing and Comparative Analysis",
+      skills: ["Writing", "Grammar", "School English"],
+      summary: "Model-text grammar jobs and the fiction/non-fiction foundation for comparison.",
+      guidance:
+        "Review Section 1, Label the Job Before You Match, then identify each school text as fiction or non-fiction and state its purpose. No new portal homework was recorded.",
+      evidence: "Function-First Writing Section 1 taught · comparative-analysis foundation introduced",
+      listed: true,
+      released: true,
+      guidanceVisible: true,
+      archived: false,
+      files: [
+        {
+          label: "Open class page",
+          href: "2026-08-12/",
+        },
+      ],
+      review:
+        "We used Section 1 of the Function-First Writing handout: Model Text: Label the Job Before You Match. Before matching a trend expression, we identified whether each gap needed an adverb, noun phrase or verb phrase. We also began the comparative-analysis task in the school homework by clarifying fiction and non-fiction. Fiction presents an imagined or shaped story, while non-fiction presents real people, events, information or arguments. No new portal homework was recorded.",
+      reviewVisible: true,
+    },
+    {
       id: "future-function-first-writing",
       eyebrow: "Future planned unit",
       date: "Undated",
