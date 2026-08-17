@@ -262,6 +262,30 @@ window.NELSON_PORTAL_DATA = {
       reviewVisible: true,
     },
     {
+      id: "class-11-grammar-creative-narration",
+      eyebrow: "Class 11",
+      date: "14 August 2026",
+      title: "Grammar Completion and Creative Writing",
+      skills: ["Grammar", "Writing", "School English"],
+      summary: "Grammar Book completion through Unit 3 and the opening narration concept.",
+      guidance:
+        "Review the difference between narration, a narrative and a narrator. The later Build a Scene models and practice remain for a future class. No new portal homework was recorded.",
+      evidence: "Previous grammar practice completed · narration concept introduced",
+      listed: true,
+      released: true,
+      guidanceVisible: true,
+      archived: false,
+      files: [
+        {
+          label: "Open class page",
+          href: "2026-08-14/",
+        },
+      ],
+      review:
+        "We finished the previous Grammar Book practice through Unit 3. We then began the creative-writing unit using Build a Scene together with the school Creative Writing material. We clarified that narration is the act or method of telling a story, a narrative is the story being told, and a narrator is the voice or person telling it. This was an introduction only: the later models, writing practice and independent scene work remain for future classes. No new portal homework was recorded.",
+      reviewVisible: true,
+    },
+    {
       id: "future-function-first-writing",
       eyebrow: "Future planned unit",
       date: "Undated",
