@@ -57,7 +57,7 @@ for (const relative of grammarRoutes) {
   if (!html.includes("data-grammar-book-link")) {
     throw new Error(`Grammar book action is missing: ${relative}`);
   }
-  if (!html.includes("grammar-book.js?v=20260805-tencent-private-v1")) {
+  if (!html.includes("grammar-book.js?v=20260817-drive-fallback-v1")) {
     throw new Error(`Grammar book action is not cache-busted: ${relative}`);
   }
 }

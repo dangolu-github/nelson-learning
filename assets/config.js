@@ -1,4 +1,5 @@
 window.NELSON_PORTAL_CONFIG = {
   serviceEndpoint: "https://1308268428-5nk7gxecan.ap-hongkong.tencentscf.com",
   grammarBookEndpoint: "https://nelson-learning-d9fqrndb7046a35a-1308268428.ap-shanghai.app.tcloudbase.com/nelson-grammar-book",
+  grammarBookFallbackUrl: "https://drive.google.com/file/d/1tL1Yhsu7cJ7BGFO83s1jjtUQsJ2y5o4r/view",
 };

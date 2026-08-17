@@ -2,6 +2,8 @@
   "use strict";
 
   const endpoint = window.NELSON_PORTAL_CONFIG?.grammarBookEndpoint || "";
+  const fallbackUrl =
+    window.NELSON_PORTAL_CONFIG?.grammarBookFallbackUrl || "";
 
   function findStatus(link) {
     return (
@@ -29,8 +31,17 @@
         accessToken,
       }),
     });
-    if (!response.ok) throw new Error("The grammar book is unavailable.");
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
+    if (response.status === 403) {
+      const error = new Error(
+        "Your portal access has expired. Refresh this page and enter the portal word again.",
+      );
+      error.code = "PORTAL_ACCESS_EXPIRED";
+      throw error;
+    }
+    if (!response.ok) {
+      throw new Error(data?.error || "The protected book service is unavailable.");
+    }
     if (!data?.ok || !data.url) {
       throw new Error(data?.error || "The grammar book is unavailable.");
     }
@@ -65,11 +76,24 @@
       if (bookWindow) bookWindow.location.replace(url);
       else window.location.assign(url);
     } catch (error) {
-      if (bookWindow) bookWindow.close();
-      showMessage(
-        link,
-        error?.message || "The grammar book is unavailable. Try again.",
-      );
+      if (error?.code === "PORTAL_ACCESS_EXPIRED") {
+        if (bookWindow) bookWindow.close();
+        window.NelsonPortalAccess?.clear();
+        showMessage(link, error.message);
+      } else if (fallbackUrl) {
+        showMessage(
+          link,
+          "The protected link is temporarily unavailable. Opening the private Google Drive copy; sign in with an approved Google account.",
+        );
+        if (bookWindow) bookWindow.location.replace(fallbackUrl);
+        else window.location.assign(fallbackUrl);
+      } else {
+        if (bookWindow) bookWindow.close();
+        showMessage(
+          link,
+          error?.message || "The grammar book is unavailable. Try again.",
+        );
+      }
     } finally {
       link.dataset.loading = "false";
       link.removeAttribute("aria-disabled");
