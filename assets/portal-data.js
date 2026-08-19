@@ -1,5 +1,5 @@
 window.NELSON_PORTAL_DATA = {
-  updated: "2026-08-17",
+  updated: "2026-08-19",
   resources: [
     {
       id: "class-0-reading-to-writing",
@@ -283,6 +283,30 @@ window.NELSON_PORTAL_DATA = {
       ],
       review:
         "We finished the previous Grammar Book practice through Unit 3. We then began the creative-writing unit using Build a Scene together with the school Creative Writing material. We clarified that narration is the act or method of telling a story, a narrative is the story being told, and a narrator is the voice or person telling it. This was an introduction only: the later Build a Scene models and CW01–CW16 remain prepared for future classes. Homework is to finish Grammar Book Unit 4 and choose one of the two Creative Writing tasks on page 6 of the school summer homework, making a serious attempt to finish it. These two tasks are assigned; submission, completion and checking are not yet recorded.",
+      reviewVisible: true,
+    },
+    {
+      id: "class-12-holidays-grammar-unit-4",
+      eyebrow: "Class 12",
+      date: "17 August 2026",
+      title: "Holidays and Grammar Book Unit 4",
+      skills: ["Speaking", "Vocabulary", "Grammar"],
+      summary: "Holiday conversation review and Grammar Book 4.1 Questions 1–6.",
+      guidance:
+        "Read the Exercise 2 holiday conversation, then rebuild each English line from the Chinese meaning prompts. Finish Grammar Book 4.1, 4.3 and 4.4.",
+      evidence: "Holiday conversation reviewed · Grammar Book 4.1 Questions 1–6 completed · homework assigned",
+      listed: true,
+      released: true,
+      guidanceVisible: true,
+      archived: false,
+      files: [
+        {
+          label: "Open class page",
+          href: "2026-08-17/",
+        },
+      ],
+      review:
+        "We completed Grammar Book 4.1 Questions 1–6 and went through the holiday conversation in Exercise 2. Homework is to read the conversation and practise rebuilding each English line from the Chinese meaning prompts, then finish Grammar Book 4.1, 4.3 and 4.4. The remaining work is assigned; submission, completion and checking are not yet recorded.",
       reviewVisible: true,
     },
     {
